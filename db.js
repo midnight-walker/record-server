@@ -45,7 +45,7 @@ function defineModel(name, attributes) {
         primaryKey : true,
         unique : true,
         allowNull: true
-    }
+    };
     attrs.createdAt = {
         type: Sequelize.BIGINT,
         allowNull: false
@@ -54,9 +54,9 @@ function defineModel(name, attributes) {
         type: Sequelize.BIGINT,
         allowNull: false
     };
-    attrs.version = {
-        type: Sequelize.BIGINT,
-        allowNull: false
+    attrs.operator = {
+        type: Sequelize.STRING(50),
+        allowNull: true
     };
     console.log('model defined for table: ' + name + '\n' + JSON.stringify(attrs, function (k, v) {
             if (k === 'type') {
@@ -93,11 +93,6 @@ function defineModel(name, attributes) {
                     }
                     obj.createdAt = now;
                     obj.updatedAt = now;
-                    obj.version = 0;
-                } else {
-                    console.log('will update entity...');
-                    obj.updatedAt = now;
-                    obj.version++;
                 }
             }
         }

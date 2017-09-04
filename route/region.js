@@ -1,33 +1,49 @@
 const model = require('../model');
 
 var getRegion = async (ctx, next) => {
-    var region = await model.region.findAll();
-    ctx.rest(region);
-};
-
-var addRegion=async (ctx, next) => {
-    var region = await model.region.create({
-        name: ctx.request.body.name,
-        code: ctx.request.body.code
+    let page=parseInt(ctx.query._page)-1,size=parseInt(ctx.query._limit);
+    var region = await model.region.findAll({
+        offset: page*size,
+        limit: size
     });
-    console.log('created: ' + JSON.stringify(region));
+    var count=await model.region.count();
+    ctx.rest(region,count);
 };
 
-var addRegion1=async (ctx, next) => {
-    try{
-        var region = await model.region.create({
-            name: '南岸区',
-            pid:0
-        });
-        console.log('created: ' + JSON.stringify(region));
-    }catch (e){
-        console.log(e);
-    }
+var deleteRegion = async (ctx, next) => {
+    let params={id:parseInt(ctx.params.id)};
+    var region = await model.region.find({where:params});
+    await region.destroy();
+    ctx.rest({success:true});
+};
 
+var createRegion = async (ctx, next) => {
+    let params={
+        name: ctx.request.body.name,
+        code: ctx.request.body.code,
+        pid:0
+    };
+    var region = await model.region.create(params);
+    ctx.rest({
+        success:true
+    });
+};
+
+var updateRegion = async (ctx, next) => {
+    let params={id:parseInt(ctx.params.id)};
+    var region = await model.region.find({where:params});
+    region.name=ctx.request.body.name;
+    region.code=ctx.request.body.code;
+    region.updatedAt=Date.now();
+    await region.save();
+    ctx.rest({
+        success:true
+    });
 };
 
 module.exports = {
-    'GET /api/getRegion': getRegion,
-    'GET /api/addRegion': addRegion1,
-    'POST /api/addRegion': addRegion,
+    'GET /api/region': getRegion,
+    'POST /api/region': createRegion,
+    'PATCH /api/region/:id':updateRegion,
+    'DELETE /api/region/:id':deleteRegion
 };

@@ -32,6 +32,9 @@ app.use(session({
     key: "SESSIONID"   //default "koa:sess"
 }));
 app.use(bodyParser());
+
+
+//app.use(koabody({}));
 // log request URL:
 app.use(staticFiles('/static/', __dirname + '/dist'));
 app.use(staticFiles('/.well-known/', __dirname + '/.well-known'));
@@ -63,7 +66,17 @@ for (var f of js_files) {
             var path = url.substring(5);
             router.post(path, mapping[url]);
             console.log(`register URL mapping: POST ${path}`);
-        } else {
+        } else if (url.startsWith('DELETE ')) {
+            // 如果url类似"POST xxx":
+            var path = url.substring(7);
+            router.delete(path, mapping[url]);
+            console.log(`register URL mapping: DELETE ${path}`);
+        }else if (url.startsWith('PATCH ')) {
+            // 如果url类似"POST xxx":
+            var path = url.substring(6);
+            router.patch(path, mapping[url]);
+            console.log(`register URL mapping: PATCH ${path}`);
+        }else {
             // 无效的URL:
             console.log(`invalid URL: ${url}`);
         }
