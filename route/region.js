@@ -1,11 +1,14 @@
 const model = require('../model');
 
 var getRegion = async (ctx, next) => {
-    let page=parseInt(ctx.query._page)-1,size=parseInt(ctx.query._limit);
-    var region = await model.region.findAll({
-        offset: page*size,
-        limit: size
-    });
+    let page=parseInt(ctx.query._page)-1,size=parseInt(ctx.query._limit),query={};
+    if(!isNaN(page) && !isNaN(size)){
+        query={
+            offset: page*size,
+            limit: size
+        }
+    }
+    var region = await model.region.findAll(query);
     var count=await model.region.count();
     ctx.rest(region,count);
 };

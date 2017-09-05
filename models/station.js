@@ -3,17 +3,11 @@
  */
 const db = require('../db');
 
-module.exports = db.defineModel('region', {
+module.exports = db.defineModel('station', {
     name: {
-        type:db.STRING(50),
-        unique : true
+        type:db.STRING(50)
     },
-    code: {
-        type:db.STRING(50),
-        allowNull:true
-    },
-    pid:{
-        type:db.BIGINT,
-        allowNull:true
+    regionId:{
+        type:db.BIGINT
     }
 });

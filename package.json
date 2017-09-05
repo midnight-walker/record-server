@@ -1,7 +1,7 @@
 {
-  "name": "defense-record-server",
+  "name": "record-server",
   "version": "1.0.0",
-  "description": "defense-record-server for clan",
+  "description": "record-server for clan",
   "main": "app.js",
   "scripts": {
     "start": "node app.js --harmony"
