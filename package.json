@@ -18,11 +18,12 @@
     "koa-bodyparser": "3.2.0",
     "koa-router": "7.0.0",
     "lodash": "^4.17.4",
+    "moment": "^2.18.1",
     "vue": "^2.4.1",
     "vue-echarts": "^2.4.0",
     "vue-meta": "^0.5.6",
     "vuex": "^2.3.1",
-    "xlsx-style": "0.8.9"
+    "xlsx-style": "^0.8.9"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",

@@ -1,6 +1,7 @@
 /**
  * Created by tqj <2482366539@qq.com> on 2017/8/9.
  */
+const sendExcel=require('../utils/export/base/send');
 module.exports = {
     APIError: function (code, message) {
         this.code = code || 'internal:unknown_error';
@@ -15,7 +16,8 @@ module.exports = {
                     ctx.response.set('x-total-count', count);
                     ctx.response.type = 'application/json';
                     ctx.response.body = data;
-                }
+                };
+                ctx.sendExcel=sendExcel;
                 try {
                     await next();
                 } catch (e) {

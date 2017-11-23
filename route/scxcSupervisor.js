@@ -1,5 +1,5 @@
 const model = require('../model');
-let {exportExcel} = require('../utils/export/defence');
+let {exportExcel} = require('../utils/export/scxcSupervisor');
 let moment = require('moment');
 
 var getWhere=(query)=>{
@@ -35,58 +35,58 @@ var getListQuery=(query)=>{
     return listQuery;
 };
 
-var getDefence = async (ctx, next) => {
+var getScxcSupervisor = async (ctx, next) => {
     let listQuery=getListQuery(ctx.query),countQuery={};
 
     countQuery.where=listQuery.where=getWhere(ctx.query);
 
-    var defence = await model.defence.findAll(listQuery);
-    var count=await model.defence.count(countQuery);
-    ctx.rest(defence,count);
+    var scxcSupervisor = await model.scxcSupervisor.findAll(listQuery);
+    var count=await model.scxcSupervisor.count(countQuery);
+    ctx.rest(scxcSupervisor,count);
 };
 
-var exportDefence = async (ctx, next) => {
+var exportScxcSupervisor = async (ctx, next) => {
     let listQuery=getListQuery(ctx.query),countQuery={};
 
     countQuery.where=listQuery.where=getWhere(ctx.query);
 
-    var defence = await model.defence.findAll(listQuery);
-    var count=await model.defence.count(countQuery);
-    let data=exportExcel(defence);
+    var scxcSupervisor = await model.scxcSupervisor.findAll(listQuery);
+    var count=await model.scxcSupervisor.count(countQuery);
+    let data=exportExcel(scxcSupervisor);
     ctx.sendExcel(data,ctx.req,ctx.res,'aaa.xlsx');
 };
 
-var deleteDefence = async (ctx, next) => {
+var deleteScxcSupervisor = async (ctx, next) => {
     let params={id:parseInt(ctx.params.id)};
-    var defence = await model.defence.find({where:params});
-    await defence.destroy();
+    var scxcSupervisor = await model.scxcSupervisor.find({where:params});
+    await scxcSupervisor.destroy();
     ctx.rest({success:true});
 };
 
-var createDefence = async (ctx, next) => {
+var createScxcSupervisor = async (ctx, next) => {
     let entity={};
     Object.assign(entity,ctx.request.body);
-    var defence = await model.defence.create(entity);
+    var scxcSupervisor = await model.scxcSupervisor.create(entity);
     ctx.rest({
         success:true
     });
 };
 
-var updateDefence = async (ctx, next) => {
+var updateScxcSupervisor = async (ctx, next) => {
     let params={id:parseInt(ctx.params.id)};
-    var defence = await model.defence.find({where:params});
-    Object.assign(defence,ctx.request.body);
-    defence.updatedAt=Date.now();
-    await defence.save();
+    var scxcSupervisor = await model.scxcSupervisor.find({where:params});
+    Object.assign(scxcSupervisor,ctx.request.body);
+    scxcSupervisor.updatedAt=Date.now();
+    await scxcSupervisor.save();
     ctx.rest({
         success:true
     });
 };
 
 module.exports = {
-    'GET /api/defence': getDefence,
-    'GET /api/exportDefence': exportDefence,
-    'POST /api/defence': createDefence,
-    'PATCH /api/defence/:id':updateDefence,
-    'DELETE /api/defence/:id':deleteDefence
+    'GET /api/scxcSupervisor': getScxcSupervisor,
+    'GET /api/exportScxcSupervisor': exportScxcSupervisor,
+    'POST /api/scxcSupervisor': createScxcSupervisor,
+    'PATCH /api/scxcSupervisor/:id':updateScxcSupervisor,
+    'DELETE /api/scxcSupervisor/:id':deleteScxcSupervisor
 };
