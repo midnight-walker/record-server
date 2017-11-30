@@ -47,7 +47,10 @@ var md5 = function(data) {
 var auth = async (ctx, next) => {
     if(ctx.request.query && ctx.request.query.data){
         var args=ctx.request.query.data;
+        //var args='POST&/upyun_notify_url&Wed, 09 Nov 2016 14:26:58 GMT&ed091459198a814d549701dab1dc4880';
         var app_secret=md5("gse23%21s*ph@dds1saw2");
+        //var app_secret=md5('password123');
+        console.log(app_secret);
         var sign=crypto.createHmac('sha1', app_secret).update(args).digest().toString('base64');
 
         ctx.response.body=sign;
