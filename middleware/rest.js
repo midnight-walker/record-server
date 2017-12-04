@@ -17,7 +17,7 @@ module.exports = {
         return async (ctx, next) => {
             if (ctx.request.path.startsWith(pathPrefix)) {
                 console.log(`Process API ${ctx.request.method} ${ctx.request.url}...`);
-                console.log('!!!!'+ctx.request.referer);
+                console.log('!!!!'+ctx.request.header.referer);
                 ctx.rest = (data,count=10) => {
                     ctx.response.set('x-total-count', count);
                     ctx.response.type = 'application/json';
