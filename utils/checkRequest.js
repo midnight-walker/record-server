@@ -25,7 +25,7 @@ var allows=[
 
 ];
 module.exports = function(header,method,path){
-    if(header.host.indexOf('127.0.0.1:3000'>-1)){
+    if(header.host.indexOf('127.0.0.1:3000')>-1){
         return true;
     }else{
         console.log(method,path);
