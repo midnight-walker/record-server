@@ -15,7 +15,9 @@ var getUsers = async (ctx, next) => {
 
 var validateUser=async (ctx, next) => {
     var users = await model.user.findAll({
-        wxname:ctx.query.wxname
+        where: {
+            wxname: ctx.query.wxname
+        }
     });
     ctx.rest(users);
 };
