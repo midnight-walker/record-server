@@ -13,11 +13,15 @@ module.exports = {
     restify: (pathPrefix) => {
         pathPrefix = pathPrefix || '/api/';
         return async (ctx, next) => {
-            console.log(ctx.request.header);
-            /*if(!checkRequest(ctx.request.header.referer,ctx.request.path)){
-
+            if(!checkRequest(ctx.request.header,ctx.request.method,ctx.request.path)){
+                ctx.response.status = 400;
+                ctx.response.type = 'application/json';
+                ctx.response.body = {
+                    code: e.code || 'auth failed',
+                    message: e.message || 'auth failed'
+                };
             }
-            else */if (ctx.request.path.startsWith(pathPrefix)) {
+            else if (ctx.request.path.startsWith(pathPrefix)) {
                 console.log(`Process API ${ctx.request.method} ${ctx.request.url}...`);
                 ctx.rest = (data,count=10) => {
                     ctx.response.set('x-total-count', count);
