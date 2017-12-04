@@ -30,7 +30,7 @@ module.exports = function(header,method,path){
     }else{
         console.log(method,path);
         return allows.some((item)=>{
-            return item.method===method && path===path;
+            return item.method===method && item.path===path;
         })
     }
 }
