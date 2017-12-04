@@ -3,9 +3,7 @@
  */
 const sendExcel=require('../utils/export/base/send');
 
-function checkRequest(){
-
-}
+const checkRequest=require('../utils/checkRequest');
 
 module.exports = {
     APIError: function (code, message) {
@@ -15,9 +13,12 @@ module.exports = {
     restify: (pathPrefix) => {
         pathPrefix = pathPrefix || '/api/';
         return async (ctx, next) => {
-            if (ctx.request.path.startsWith(pathPrefix)) {
+            console.log(ctx.request.header);
+            /*if(!checkRequest(ctx.request.header.referer,ctx.request.path)){
+
+            }
+            else */if (ctx.request.path.startsWith(pathPrefix)) {
                 console.log(`Process API ${ctx.request.method} ${ctx.request.url}...`);
-                console.log('!!!!'+ctx.request.header.referer);
                 ctx.rest = (data,count=10) => {
                     ctx.response.set('x-total-count', count);
                     ctx.response.type = 'application/json';
