@@ -17,8 +17,8 @@ module.exports = {
                 ctx.response.status = 400;
                 ctx.response.type = 'application/json';
                 ctx.response.body = {
-                    code: e.code || 'auth failed',
-                    message: e.message || 'auth failed'
+                    code: 'auth failed',
+                    message: 'auth failed'
                 };
             }
             else if (ctx.request.path.startsWith(pathPrefix)) {
