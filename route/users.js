@@ -13,6 +13,13 @@ var getUsers = async (ctx, next) => {
     ctx.rest(users,count);
 };
 
+var validateUser=async (ctx, next) => {
+    var users = await model.user.findAll({
+        wxname:ctx.query.wxname
+    });
+    ctx.rest(users);
+};
+
 var deleteUsers = async (ctx, next) => {
     let params={id:parseInt(ctx.params.id)};
     var user = await model.user.find({where:params});
@@ -52,6 +59,7 @@ var updateUsers = async (ctx, next) => {
 
 module.exports = {
     'GET /api/users': getUsers,
+    'GET /api/validateUser':validateUser,
     'POST /api/users': createUsers,
     'PATCH /api/users/:id':updateUsers,
     'DELETE /api/users/:id':deleteUsers
