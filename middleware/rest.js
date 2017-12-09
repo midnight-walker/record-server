@@ -13,6 +13,7 @@ module.exports = {
     restify: (pathPrefix) => {
         pathPrefix = pathPrefix || '/api/';
         return async (ctx, next) => {
+            console.log(ctx.request);
             if(!checkRequest(ctx.request.header,ctx.request.method,ctx.request.path)){
                 ctx.response.status = 400;
                 ctx.response.type = 'application/json';

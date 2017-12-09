@@ -26,7 +26,11 @@ var allows=[
 ];
 module.exports = function(header,method,path){
     if(header.host.indexOf('127.0.0.1:3000')>-1){
-        return true;
+        if(header.referer && header.referer.indexOf('?clkj123')>-1){
+            return true;
+        }else{
+            return false;
+        }
     }else{
         console.log(method,path);
         return allows.some((item)=>{
