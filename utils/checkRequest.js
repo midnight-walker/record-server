@@ -1,6 +1,7 @@
 /**
  * Created by tqj <2482366539@qq.com> on 2017/12/4.
  */
+let qs=require('../config/web').qs;
 var allows=[
     {
         method:'GET',
@@ -26,7 +27,7 @@ var allows=[
 ];
 module.exports = function(header,method,path){
     if(header.host.indexOf('127.0.0.1:3000')>-1){
-        if(header.referer && header.referer.indexOf('?clkj123')>-1){
+        if(header.referer && header.referer.indexOf(qs)>-1){
             return true;
         }else{
             return false;
