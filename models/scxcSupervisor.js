@@ -46,18 +46,6 @@ module.exports = db.defineModel('scxc_supervisor', {
         type:db.STRING(50),
         allowNull:true
     },
-    workQuality:{
-        type:db.STRING(50),
-        allowNull:true
-    },
-    mainQuestion:{
-        type:db.STRING(50),
-        allowNull:true
-    },
-    effect:{
-        type:db.STRING(50),
-        allowNull:true
-    },
     longitude:{
         type:db.DOUBLE,
         allowNull:true
@@ -70,80 +58,236 @@ module.exports = db.defineModel('scxc_supervisor', {
         type:db.STRING(5000),
         allowNull:true
     },
+    //伐除开始
     fcXianyan:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcXixiao:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcGaodudayuwu:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcChanzhe:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcFugai:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcFengzhe:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcHuoshao:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcXuanya:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcXuangua:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fcHuoshukuzhi:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
-    jcFachu:{
-        type:db.STRING(255),
+    fcTotal:{
+        type:db.STRING(20),
         allowNull:true
     },
-    jcYincang:{
-        type:db.STRING(255),
+    //伐除结束，集材开始
+    jcFcXianyan:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcXixiao:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcGaodudayuwu:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcChanzhe:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcFugai:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcFengzhe:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcHuoshao:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcXuanya:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcXuangua:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcHuoshukuzhi:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcFcTotal:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcYcCaogai:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcYcKuye:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcYcTurang:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcYcTengman:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcYcDigou:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcYcDongxue:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    jcYcTotal:{
+        type:db.STRING(20),
         allowNull:true
     },
     jcKusi:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
-    fsJicai:{
-        type:db.STRING(255),
+    //集材结束。焚烧开始
+    fsFcXianyan:{
+        type:db.STRING(20),
         allowNull:true
     },
+    fsFcXixiao:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcGaodudayuwu:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcChanzhe:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcFugai:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcFengzhe:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcHuoshao:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcXuanya:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcXuangua:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcHuoshukuzhi:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsFcTotal:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsYcCaogai:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsYcKuye:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsYcTurang:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsYcTengman:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsYcDigou:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsYcDongxue:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsYcTotal:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fsKusi:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    //伐桩开始
     fzFazhuang:{
-        type:db.STRING(255),
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fzBopi:{
+        type:db.STRING(20),
         allowNull:true
     },
     fzJiahao:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fzTouyao:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fzShuliao:{
-        type:db.STRING(255),
+        type:db.STRING(20),
         allowNull:true
     },
     fzNitu:{
-        type:db.STRING(255),
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fzTotal:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    fzNumber:{
+        type:db.STRING(20),
         allowNull:true
     }
 });
