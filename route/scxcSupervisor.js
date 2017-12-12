@@ -7,7 +7,8 @@ var getWhere=(query)=>{
     let regionId=parseInt(query.regionId),
         stationId=parseInt(query.stationId),
         startDate=moment(query.startDate).format('x'),
-        endDate=moment(query.endDate).format('x');
+        endDate=moment(query.endDate).format('x'),
+        operator=query.operator;
     if(!isNaN(regionId) && regionId){
         where=Object.assign({},where,{regionId});
     }
@@ -20,6 +21,9 @@ var getWhere=(query)=>{
                 $between: [startDate, endDate]
             }
         })
+    }
+    if(operator){
+        where=where=Object.assign({},where,{operator});
     }
     return where
 }

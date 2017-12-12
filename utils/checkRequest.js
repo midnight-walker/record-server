@@ -23,6 +23,10 @@ var allows=[
         method:'POST',
         path:'/api/scxcSupervisor'
     },
+    {
+        method:'GET',
+        path:'/api/scxcSupervisor'
+    }
 
 ];
 module.exports = function(header,method,path){
