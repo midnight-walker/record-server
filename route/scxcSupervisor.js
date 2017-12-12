@@ -15,7 +15,7 @@ var getWhere=(query)=>{
     if(!isNaN(stationId) && stationId){
         where=Object.assign({},where,{stationId});
     }
-    if(!isNaN(startDate) && !isNaN(endDate)){
+    if(!isNaN(query.startDate) && !isNaN(query.endDate)){
         where=Object.assign({},where,{
             time:{
                 $between: [startDate, endDate]
