@@ -104,43 +104,23 @@ module.exports = db.defineModel('scxc_supervisor', {
         allowNull:true
     },
     //伐除结束，集材开始
-    jcFcXianyan:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    jcFcXixiao:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    jcFcGaodudayuwu:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    jcFcChanzhe:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    jcFcFugai:{
-        type:db.STRING(20),
-        allowNull:true
-    },
     jcFcFengzhe:{
         type:db.STRING(20),
         allowNull:true
     },
-    jcFcHuoshao:{
+    jcFcSongshu:{
         type:db.STRING(20),
         allowNull:true
     },
-    jcFcXuanya:{
+    jcFcSongmu:{
         type:db.STRING(20),
         allowNull:true
     },
-    jcFcXuangua:{
+    jcFcSongzhi:{
         type:db.STRING(20),
         allowNull:true
     },
-    jcFcHuoshukuzhi:{
+    jcFcShaotou:{
         type:db.STRING(20),
         allowNull:true
     },
@@ -176,84 +156,16 @@ module.exports = db.defineModel('scxc_supervisor', {
         type:db.STRING(20),
         allowNull:true
     },
-    jcKusi:{
-        type:db.STRING(20),
-        allowNull:true
-    },
     //集材结束。焚烧开始
-    fsFcXianyan:{
+    fsSongzhi:{
         type:db.STRING(20),
         allowNull:true
     },
-    fsFcXixiao:{
+    fsSongmu:{
         type:db.STRING(20),
         allowNull:true
     },
-    fsFcGaodudayuwu:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcChanzhe:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcFugai:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcFengzhe:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcHuoshao:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcXuanya:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcXuangua:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcHuoshukuzhi:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsFcTotal:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsYcCaogai:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsYcKuye:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsYcTurang:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsYcTengman:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsYcDigou:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsYcDongxue:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsYcTotal:{
-        type:db.STRING(20),
-        allowNull:true
-    },
-    fsKusi:{
+    fsSongcai:{
         type:db.STRING(20),
         allowNull:true
     },
