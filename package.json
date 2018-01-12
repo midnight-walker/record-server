@@ -1,17 +1,19 @@
 {
   "name": "record-server",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "record-server for clan",
   "main": "app.js",
   "scripts": {
-    "start": "node app.js --harmony"
+    "start": "set NODE_ENV=local&& node app.js --harmony",
+    "build": "set NODE_ENV=development&&webpack --config build/webpack.config.js --hide-modules",
+    "release": "set NODE_ENV=development&& node app.js --harmony"
   },
   "keywords": [],
   "author": "midnight-walker",
   "license": "Apache-2.0",
   "dependencies": {
     "axios": "^0.15.3",
-    "element-ui": "^1.4.0",
+    "element-ui": "^2.0.8",
     "jquery": "3.1.1",
     "koa": "2.0.0",
     "koa-body": "^2.3.0",
@@ -19,7 +21,7 @@
     "koa-router": "7.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "vue": "^2.4.1",
+    "vue": "^2.5.2",
     "vue-echarts": "^2.4.0",
     "vue-meta": "^0.5.6",
     "vuex": "^2.3.1",
@@ -45,9 +47,10 @@
     "style-loader": "^0.13.2",
     "vue-loader": "^11.3.4",
     "vue-style-loader": "^2.0.5",
-    "vue-template-compiler": "^2.4.1",
+    "vue-template-compiler": "^2.5.1",
     "webpack": "^2.5.1",
     "koa-webpack-middleware": "latest",
+    "koa-2-webpack-dev-middleware":"latest",
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.1.0",
     "sequelize": "3.24.1",

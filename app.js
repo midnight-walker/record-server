@@ -16,18 +16,15 @@ const fs = require('fs');
 let staticFiles = require('./middleware/static-files');
 let authLogin = require('./middleware/auth-login');
 
-/*const model = require('./model');
+if(process.env.NODE_ENV==='local'){
+    const {devMiddleware,hotMiddleware}= require("./utils/webpackUtil");
+    app.use(devMiddleware());
+    app.use(hotMiddleware());
+}
+/*app.use(async (ctx, next) =>{
 
-let User = model.user;
-(async () => {
-    var user = await User.create({
-        username: 'John',
-        password: '123456',
-        wxname: 'hahaha',
-        phone:13333333333
-    });
-    console.log('created: ' + JSON.stringify(user));
-})();*/
+})*/
+
 app.use(session({
     key: "SESSIONID"   //default "koa:sess"
 }));
@@ -36,54 +33,15 @@ app.use(bodyParser());
 
 //app.use(koabody({}));
 // log request URL:
-app.use(staticFiles('/static/', __dirname + '/dist'));
+app.use(staticFiles('/static/', __dirname + '/static'));
 app.use(staticFiles('/.well-known/', __dirname + '/.well-known'));
 app.use(authLogin);
 app.use(rest.restify());
 
-// 先导入fs模块，然后用readdirSync列出文件
-// 这里可以用sync是因为启动时只运行一次，不存在性能问题:
-var files = fs.readdirSync(__dirname + '/route');
-
-// 过滤出.js文件:
-var js_files = files.filter((f)=>{
-    return f.endsWith('.js');
-});
-
-// 处理每个js文件:
-for (var f of js_files) {
-    console.log(`process controller: ${f}...`);
-    // 导入js文件:
-    let mapping = require(__dirname + '/route/' + f);
-    for (var url in mapping) {
-        if (url.startsWith('GET ')) {
-            // 如果url类似"GET xxx":
-            var path = url.substring(4);
-            router.get(path, mapping[url]);
-            console.log(`register URL mapping: GET ${path}`);
-        } else if (url.startsWith('POST ')) {
-            // 如果url类似"POST xxx":
-            var path = url.substring(5);
-            router.post(path, mapping[url]);
-            console.log(`register URL mapping: POST ${path}`);
-        } else if (url.startsWith('DELETE ')) {
-            // 如果url类似"POST xxx":
-            var path = url.substring(7);
-            router.delete(path, mapping[url]);
-            console.log(`register URL mapping: DELETE ${path}`);
-        }else if (url.startsWith('PATCH ')) {
-            // 如果url类似"POST xxx":
-            var path = url.substring(6);
-            router.patch(path, mapping[url]);
-            console.log(`register URL mapping: PATCH ${path}`);
-        }else {
-            // 无效的URL:
-            console.log(`invalid URL: ${url}`);
-        }
-    }
-}
 
 // add router middleware:
+let addRoute=require('./utils/addRoute');
+addRoute(router,__dirname);
 app.use(router.routes());
 
 

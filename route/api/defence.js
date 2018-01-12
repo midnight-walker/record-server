@@ -1,5 +1,5 @@
-const model = require('../model');
-let {exportExcel} = require('../utils/export/defence');
+const model = require('../../model');
+let {exportExcel} = require('../../utils/export/defence');
 let moment = require('moment');
 
 var getWhere=(query)=>{
@@ -25,7 +25,7 @@ var getWhere=(query)=>{
 }
 
 var getListQuery=(query)=>{
-    let page=parseInt(query._page)-1,size=parseInt(query._limit),listQuery={};
+    let page=parseInt(query.page)-1,size=parseInt(query.pageSize),listQuery={};
     if(!isNaN(page) && !isNaN(size)){
         listQuery={
             offset: page*size,

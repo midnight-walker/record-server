@@ -6,3 +6,4 @@ node_modules/**
 /ssl
 /.well-know
 config/**
+/static

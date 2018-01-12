@@ -1,8 +1,10 @@
 /**
  * Created by tqj <2482366539@qq.com> on 2017/8/7.
  */
-var index = async (ctx, next) => {
+let render=require('../utils/renderService');
 
+var index = async (ctx, next) => {
+    ctx.response.body = render(ctx,'index',{});
 };
 
 

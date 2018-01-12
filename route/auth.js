@@ -8,8 +8,8 @@ const crypto = require("crypto");
 var login = async (ctx, next) => {
     ctx.response.body = `<h1>Index</h1>
         <form action="/loginResult" method="post">
-            <p>Name: <input name="name" value="koa"></p>
-            <p>Password: <input name="password" type="password"></p>
+            <p>Name: <input name="name" value="frog"></p>
+            <p>Password: <input name="password" type="password" value="123456"></p>
             <p><input type="submit" value="Submit"></p>
         </form>`;
 };
@@ -25,7 +25,7 @@ var loginResult = async (ctx, next) => {
     if (users.length) {
         var user=users[0].dataValues;
         ctx.session.user=user;
-        ctx.response.body = `<h1>Welcome, ${user.username}!</h1>`;
+        ctx.redirect('/');
     } else {
         ctx.redirect('/login');
     }

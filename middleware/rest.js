@@ -3,31 +3,27 @@
  */
 const sendExcel=require('../utils/export/base/send');
 
-const checkRequest=require('../utils/checkRequest');
-
 module.exports = {
     APIError: function (code, message) {
         this.code = code || 'internal:unknown_error';
         this.message = message || '';
+        this.success = false;
     },
     restify: (pathPrefix) => {
         pathPrefix = pathPrefix || '/api/';
         return async (ctx, next) => {
-            console.log(ctx.request);
-            if(!checkRequest(ctx.request.header,ctx.request.method,ctx.request.path)){
-                ctx.response.status = 400;
-                ctx.response.type = 'application/json';
-                ctx.response.body = {
-                    code: 'auth failed',
-                    message: 'auth failed'
-                };
-            }
-            else if (ctx.request.path.startsWith(pathPrefix)) {
+            if (ctx.request.path.startsWith(pathPrefix)) {
                 console.log(`Process API ${ctx.request.method} ${ctx.request.url}...`);
-                ctx.rest = (data,count=10) => {
-                    ctx.response.set('x-total-count', count);
+                ctx.rest = (data,count) => {
                     ctx.response.type = 'application/json';
-                    ctx.response.body = data;
+                    let result={
+                        data,
+                        success:true
+                    };
+                    if(count!==undefined){
+                        result.total=count;
+                    }
+                    ctx.response.body = result;
                 };
                 ctx.sendExcel=sendExcel;
                 try {
@@ -35,11 +31,12 @@ module.exports = {
                 } catch (e) {
                     console.log(e);
                     console.log('Process API error...');
-                    ctx.response.status = 400;
+                    ctx.response.status = 200;
                     ctx.response.type = 'application/json';
                     ctx.response.body = {
                         code: e.code || 'internal:unknown_error',
-                        message: e.message || ''
+                        message: e.message || '',
+                        success : false
                     };
                 }
             } else {

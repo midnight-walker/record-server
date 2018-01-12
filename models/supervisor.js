@@ -6,10 +6,6 @@ const db = require('../db');
 module.exports = db.defineModel('supervisor', {
     regionId:db.BIGINT,
     stationId:db.BIGINT,
-    stationName:{
-        type:db.STRING(50),
-        allowNull:true
-    },
     village:{
         type:db.STRING(50),
         allowNull:true
@@ -42,8 +38,12 @@ module.exports = db.defineModel('supervisor', {
         type:db.BIGINT,
         allowNull:true
     },
-    workGroup:{
-        type:db.STRING(50),
+    projectId:{
+        type:db.BIGINT,
+        allowNull:true
+    },
+    workGroupId:{
+        type:db.BIGINT,
         allowNull:true
     },
     workQuality:{
@@ -56,18 +56,6 @@ module.exports = db.defineModel('supervisor', {
     },
     effect:{
         type:db.STRING(50),
-        allowNull:true
-    },
-    longitude:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    latitude:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    picture:{
-        type:db.STRING(5000),
         allowNull:true
     }
 });
