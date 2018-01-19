@@ -34,7 +34,7 @@ module.exports = async (ctx, next) => {
                 ctx.redirect('/login');
             }
         };
-        if (path === '/loginResult' || path === '/login' || path === '/api/validateWx' || path === '/api/auth') {
+        if (path === '/loginResult' || path === '/login' || path === '/api/validateWx' || path === '/auth') {
             await next();
         } else {
             let user=ctx.session.user;
