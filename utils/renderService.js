@@ -47,6 +47,7 @@ module.exports = function (ctx, pageName, model) {
     <head>
     <meta charset="utf-8">
     <title></title>
+    <link href="//cdn.bootcss.com/element-ui/2.0.11/theme-chalk/index.css" rel="stylesheet">
     ${linkList}
     <script type="text/javascript">
         //存放一些基本的页面信息
@@ -55,9 +56,13 @@ module.exports = function (ctx, pageName, model) {
     </head>
     <body>
     <div id="app"></div>
-    ${scriptList}
     <script type="text/javascript" src="//cdn.bootcss.com/xlsx/0.11.17/xlsx.full.min.js"></script>
     <script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script src="//cdn.bootcss.com/lodash.js/4.17.4/lodash.min.js"></script>
+    <script src="//cdn.bootcss.com/moment.js/2.20.1/moment.min.js"></script>
+    <script src="//cdn.bootcss.com/vue/2.5.8/vue.runtime.js"></script>
+    <script src="//cdn.bootcss.com/element-ui/2.0.11/index.js"></script>
+    ${scriptList}
     </body>
     </html>`;
 };

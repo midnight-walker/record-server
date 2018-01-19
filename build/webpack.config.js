@@ -8,50 +8,7 @@ module.exports = {
     plugins: [
         ...utils.plugins,
         new CopyWebpackExternalsManifest({
-            externals: [{
-                module: "lodash",
-                entry: ["lodash.min.js"],
-                export: {
-                    root: "_",
-                    commonjs2: 'lodash'
-                }
-            }, {
-                module: "jquery",
-                entry: ["dist/jquery.min.js"],
-                export: {
-                    root: "$",
-                    commonjs2: 'jquery'
-                }
-            }, {
-                module: "moment",
-                entry: ["min/moment.min.js"],
-                export: {
-                    root: "moment",
-                    commonjs2: 'moment'
-                }
-            }, {
-                module: "vue",
-                entry: [utils.vueRuntimeByEnv],
-                export: {
-                    root: "Vue",
-                    commonjs2: 'vue'
-                }
-            }, {
-                module: "element-ui",
-                entry: ["lib/index.js", "lib/theme-chalk/index.css"],
-                export: {
-                    root: "ELEMENT",
-                    commonjs2: 'element-ui'
-                },
-                assets: ["lib/theme-chalk/fonts"]
-            }, {
-                module: "vue-echarts",
-                entry: ["dist/vue-echarts.js"],
-                export: {
-                    root: "VueECharts",
-                    commonjs2: 'vue-echarts'
-                }
-            }]
+            externals: []
         })
     ],
     module: {
