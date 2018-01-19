@@ -3,7 +3,7 @@
  */
 
 var crypto = require('crypto');
-let {appId,appSecret}=require('../../config/web');
+let {appIds,appSecrets}=require('../../config/web');
 let axios=require('axios');
 const model = require('../../model');
 
@@ -45,6 +45,8 @@ var validateWx=async (ctx, next) => {
         ctx.rest(0);
         return;
     }
+    let idx=ctx.query.appId || 0,appId=appIds[idx],appSecret=appSecrets[idx];
+
     let res=await axios({
         method: 'GET',
         url: 'https://api.weixin.qq.com/sns/jscode2session',

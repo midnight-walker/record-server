@@ -27,7 +27,7 @@ module.exports = async (ctx, next) => {
                 ctx.response.type = 'application/json';
                 ctx.response.body = {
                     success : false,
-                    code: 'auth failed',
+                    code: -1,
                     message: 'auth failed'
                 };
             }else{
