@@ -56,6 +56,8 @@ module.exports = function (ctx, pageName, model) {
     <body>
     <div id="app"></div>
     ${scriptList}
+    <script type="text/javascript" src="//cdn.bootcss.com/xlsx/0.11.17/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     </body>
     </html>`;
 };

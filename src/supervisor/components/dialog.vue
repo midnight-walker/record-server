@@ -11,25 +11,11 @@
                     ></el-option>
                 </el-select>
             </el-form-item>
-            <el-form-item label="所属区县" prop="regionId">
-                <el-select @change="changeRegion" v-model="form.regionId"  placeholder="请选择所属区县">
-                    <el-option
-                            v-for="region in regionList"
-                            :key="region.id"
-                            :label="region.name"
-                            :value="region.id"
-                    ></el-option>
-                </el-select>
+            <el-form-item label="区县" prop="region">
+                <el-input v-model="form.region"></el-input>
             </el-form-item>
-            <el-form-item label="所属林场" prop="stationId">
-                <el-select v-model="form.stationId"  placeholder="请选择所属林场">
-                    <el-option
-                            v-for="station in stationSearchList"
-                            :key="station.id"
-                            :label="station.name"
-                            :value="station.id"
-                    ></el-option>
-                </el-select>
+            <el-form-item label="乡镇" prop="station">
+                <el-input v-model="form.station"></el-input>
             </el-form-item>
 
             <el-form-item label="村（管护站）名" prop="village">
@@ -60,9 +46,16 @@
                 <el-input v-model="form.targetName"></el-input>
             </el-form-item>
 
-            <el-form-item label="时间" prop="time">
+            <el-form-item label="开始时间" prop="time">
                 <el-date-picker
-                        v-model="form.time"
+                        v-model="form.startTime"
+                        type="date"
+                        placeholder="选择日期">
+                </el-date-picker>
+            </el-form-item>
+            <el-form-item label="结束时间" prop="time">
+                <el-date-picker
+                        v-model="form.endTime"
                         type="date"
                         placeholder="选择日期">
                 </el-date-picker>
@@ -92,13 +85,13 @@
 </style>
 <script type="text/ecmascript-6">
     export default {
-        props: ['dialogVisible','operatorType','form','regionList','stationList','workGroupList','projectList'],
+        props: ['dialogVisible','operatorType','form','workGroupList','projectList'],
         data() {
             return {
                 rules: {
                     projectId:  [{ required: true, message: '请选择所属项目', trigger: 'change' }],
-                    regionId:  [{ required: true, message: '请选择所属区县', trigger: 'change' }],
-                    stationId:  [{ required: true, message: '请选择所属林场', trigger: 'change' }],
+                    region:  [{ required: true, message: '请填写所属区县', trigger: 'blur' }],
+                    station:  [{ required: true, message: '请填写所属乡镇', trigger: 'blur' }],
                     village:  [{ required: true, message: '请填写村（管护站）名', trigger: 'blur' }],
                     group:  [{ required: true, message: '请填写（社、林班）号', trigger: 'blur' }],
                     smallClass:  [{ required: true, message: '请填写小班号', trigger: 'blur' }],
@@ -106,17 +99,8 @@
                     smallClassArea:  [{ required: true, message: '请填写小班面积（亩）', trigger: 'blur' }],
                     treeCompose:  [{ required: true, message: '请填写树种组成', trigger: 'blur' }],
                     targetName:  [{ required: true, message: '请填写防治对象名称', trigger: 'blur' }],
-                    time:  [{ required: true, message: '请填写时间', trigger: 'change' }],
-                    workGroupId:  [{ required: true, message: '请选择施工单位', trigger: 'change' }],
-                }
-            }
-        },
-        computed:{
-            regionSearchList(){
 
-            },
-            stationSearchList(){
-                return this.stationList.filter(item=>item.regionId===this.form.regionId);
+                }
             }
         },
         methods: {
@@ -158,9 +142,6 @@
             cancel(refresh){
                 this.$emit("closeDialog",refresh===true);
             },
-            changeRegion(){
-                this.form.stationId='';
-            }
         },
         components: {
         }

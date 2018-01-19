@@ -45,8 +45,12 @@ function createExcel({head = {}, startRow = 1, columns, body, footer = {}, merge
     if (body) {
         data = body
             .map((v, i) => columns.map((k, j) => {
+                    let value=v[k['prop']];
+                    if(!value && value!==0){
+                        value='';
+                    }
                     return Object.assign({}, {
-                        v: v[k['prop']],
+                        v: value,
                         s: Object.assign({}, defaultBodyStyle, k.bodyStyle || {},v['highlight']?k.highlightStyle:{}),
                         position: getColumnChar(j) + (i + 1 + startRow)
                     })

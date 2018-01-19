@@ -3,8 +3,8 @@
  */
 module.exports=(obj)=>{
     let result={
-        regionId: '',
-        stationId: '',
+        region: '',
+        station:'',
         village: "",
         group: "",
         smallClass: "",
@@ -12,7 +12,8 @@ module.exports=(obj)=>{
         smallClassArea: "",
         treeCompose: "",
         targetName: "",
-        time: moment().format('YYYY-MM-DD'),
+        startTime: "",
+        endTime: "",
         projectId:"",
         workGroupId: "",
     };

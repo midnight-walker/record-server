@@ -1,29 +1,22 @@
 <template>
     <layout class="body-content" :nav-active="nav">
         <el-row class="search-bar">
-            所属区县：
-            <el-select @change="changeRegion" v-model="query.regionId" placeholder="">
+            所属项目：
+            <el-select @change="changeProject" v-model="query.projectId" placeholder="">
                 <el-option
-                        v-for="region in regionSearchList"
-                        :key="region.id"
-                        :label="region.name"
-                        :value="region.id"
+                        v-for="project in projectList"
+                        :key="project.id"
+                        :label="project.name"
+                        :value="project.id"
                 ></el-option>
             </el-select>
-            所属林场：
-            <el-select @change="changeStation" v-model="query.stationId" placeholder="">
-                <el-option
-                        v-for="station in stationSearchList"
-                        :key="station.id"
-                        :label="station.name"
-                        :value="station.id"
-                ></el-option>
-            </el-select>
+            <el-button type="primary" icon="plus" @click="handleImport">导入监理点</el-button>
+            <el-button type="primary" icon="plus" @click="handleExport">导出监理计划表</el-button>
         </el-row>
         <el-row class="tool-bar">
-            <el-button type="primary" icon="plus" @click="handleAdd">添加业务记录</el-button>
+            <el-button type="primary" icon="plus" @click="handleAdd">添加记录点</el-button>
         </el-row>
-        <edit-dialog :form="form" :region-list="regionList" :station-list="stationList" :workGroupList="workGroupList" :projectList="projectList" :dialog-visible="dialogVisible" :operator-type="operatorType" @closeDialog="closeDialog"></edit-dialog>
+        <edit-dialog :form="form" :workGroupList="workGroupList" :projectList="projectList" :dialog-visible="dialogVisible" :operator-type="operatorType" @closeDialog="closeDialog"></edit-dialog>
         <el-table
                 :data="tableData"
                 border
@@ -36,18 +29,12 @@
                 </template>
             </el-table-column>
             <el-table-column
-                    prop="regionId"
+                    prop="region"
                     label="区县">
-                <template slot-scope="scope">
-                    <span>{{ getRegion(scope.row.regionId) }}</span>
-                </template>
             </el-table-column>
             <el-table-column
-                    prop="stationId"
+                    prop="station"
                     label="林场">
-                <template slot-scope="scope">
-                    <span>{{ getStation(scope.row.stationId) }}</span>
-                </template>
             </el-table-column>
             <el-table-column
                     prop="village"
@@ -78,10 +65,17 @@
                     label="防治对象名称">
             </el-table-column>
             <el-table-column
-                    label="时间"
+                    label="开始时间"
                     width="120">
                 <template slot-scope="scope">
-                    <span>{{ getDate(scope.row.time) }}</span>
+                    <span>{{ getDate(scope.row.startTime) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
+                    label="结束时间"
+                    width="120">
+                <template slot-scope="scope">
+                    <span>{{ getDate(scope.row.endTime) }}</span>
                 </template>
             </el-table-column>
             <el-table-column
@@ -108,7 +102,7 @@
                 @size-change="changePageSize"
                 @current-change="changePage"
                 :current-page="query.page"
-                :page-sizes="[20,50,100, 200]"
+                :page-sizes="[10,50,100, 200]"
                 :page-size="query.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="query.total">
@@ -159,16 +153,12 @@
                 tableData: [],
                 query: {
                     total: 0,
-                    regionId: 0,
-                    stationId:0,
                     page: 1,
-                    pageSize: 20
+                    pageSize: 10
                 },
                 dialogVisible: false,
                 operatorType: true,
                 form: newForm(),
-                regionList: [],
-                stationList: [],
                 workGroupList: [],
                 projectList:[],
             }
@@ -180,16 +170,6 @@
             this.getBaseInfo();
         },
         computed:{
-            regionSearchList(){
-                return defaultList().concat(this.regionList);
-            },
-            stationSearchList(){
-                let list=this.stationList;
-                if(this.query.regionId){
-                    list=this.stationList.filter(item=>item.regionId===this.query.regionId);
-                }
-                return defaultList().concat(list);
-            }
         },
         methods: {
             handleAdd() {
@@ -210,7 +190,7 @@
                 }).then(() => {
                     this.$ajax({
                         method: 'DELETE',
-                        url: '/api/scxcSupervisor/' + row.id
+                        url: '/api/supervisor/' + row.id
                     }).then(res => {
                         this.$message.success('删除成功！');
                         this.getList();
@@ -234,16 +214,6 @@
                 Promise.all([
                     this.$ajax({
                         method: 'GET',
-                        url: '/api/region',
-                        params: {}
-                    }),
-                    this.$ajax({
-                        method: 'GET',
-                        url: '/api/station',
-                        params: {}
-                    }),
-                    this.$ajax({
-                        method: 'GET',
                         url: '/api/workGroup',
                         params: {}
                     }),
@@ -253,23 +223,13 @@
                         params: {}
                     })
                 ]).then(res => {
-                    if(res[0].success && res[1].success && res[2].success && res[3].success){
-                        this.$set(this, 'regionList', res[0].data);
-                        this.$set(this, 'stationList', res[1].data);
-                        this.$set(this, 'workGroupList', res[2].data);
-                        this.$set(this, 'projectList', res[3].data);
+                    if(res[0].success && res[1].success){
+                        this.$set(this, 'workGroupList', res[0].data);
+                        this.$set(this, 'projectList', res[1].data);
                         this.getList();
                     }
 
                 })
-            },
-            getRegion(id) {
-                let region = this.regionList.find(item => item.id === id);
-                return region ? region.name : '';
-            },
-            getStation(id) {
-                let station = this.stationList.find(item => item.id === id);
-                return station ? station.name : '';
             },
             getWorkGroup(id) {
                 let workGroup = this.workGroupList.find(item => item.id === id);
@@ -279,11 +239,7 @@
                 let project = this.projectList.find(item => item.id === id);
                 return project ? project.name : '';
             },
-            changeRegion(){
-                this.query.stationId=0;
-                this.getList();
-            },
-            changeStation(){
+            changeProject(){
                 this.getList();
             },
             getList() {
@@ -297,7 +253,102 @@
                 })
             },
             getDate(date) {
+                if(!date){
+                    return '';
+                }
                 return moment(date).format('YYYY-MM-DD');
+            },
+            handleImport(){
+                if(!this.query.projectId){
+                    this.$message.error('选择要导入的项目！');
+                    return;
+                }
+                let input = $("<input type='file'/>");
+                input.trigger('click');
+                input.off('change').on('change', this.handleFile);
+            },
+            handleFile(e){
+                let files = e.target.files;
+                let file = files[0];
+                if(!file) return;
+                this.isLoading=true;
+                let name = file.name;
+                if(typeof name!=='string'||!~name.indexOf('.xls')){
+                    this.$message.error('文件格式错误');
+                    return;
+                }
+                let result=[];
+                let reader = new FileReader();
+                let isOK = true;
+                reader.onload = (e)=> {
+                    let data = e.target.result;
+                    let wb;
+                    try{
+                        wb = XLSX.read(data, { type: "binary" });
+                    }catch (e){
+                        this.$message.error('文件格式错误');
+                        return;
+                    }
+                    let result=[];
+                    wb.SheetNames.forEach((name,idx)=>{
+                        let data=this.getExcelData(wb.Sheets[name]);
+                        console.log(data);
+                        if(data && data.length){
+                            result=result.concat(data);
+                        }
+                    });
+                    this.$ajax({
+                        method: 'post',
+                        url: '/api/supervisor/import',
+                        data: {
+                            result
+                        }
+                    }).then(res=>{
+                        this.$message.error('导入成功！');
+                    })
+                };
+                reader.readAsBinaryString(file);
+            },
+            getExcelData(data){
+                function getVal(cell){
+                    return (cell && typeof cell==='object')?cell.v:'';
+                }
+                let result=[],idx=0;
+                let i=2,item;
+                if(getVal(data['A1']).indexOf('区县')<0){
+                    return;
+                }
+                let now=+new Date();
+                while (true){
+                    let A=getVal(data['A'+i]);
+                    if(A==='' || i>=10000){
+                        break;
+                    }
+                    let item={
+                        region:getVal(data['A'+i]),
+                        station:getVal(data['B'+i]),
+                        village:getVal(data['C'+i]),
+                        group:getVal(data['D'+i]),
+                        smallClass:getVal(data['E'+i]),
+                        placeName:getVal(data['F'+i]),
+                        smallClassArea:getVal(data['G'+i]),
+                        treeCompose:getVal(data['H'+i]),
+                        targetName:getVal(data['I'+i]),
+                        projectId:this.query.projectId,
+                        createdAt:now,
+                        updatedAt:now,
+                    };
+                    result.push(item);
+                    i++;
+                }
+                return result;
+            },
+            handleExport(){
+                if(!this.query.projectId){
+                    this.$message.error('选择要导出的项目！');
+                    return;
+                }
+                window.location.href='/api/supervisor/export?projectId='+this.query.projectId;
             }
         }
     }

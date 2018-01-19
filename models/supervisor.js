@@ -4,8 +4,14 @@
 const db = require('../db');
 
 module.exports = db.defineModel('supervisor', {
-    regionId:db.BIGINT,
-    stationId:db.BIGINT,
+    region:{
+        type:db.STRING(50),
+        allowNull:true
+    },
+    station:{
+        type:db.STRING(50),
+        allowNull:true
+    },
     village:{
         type:db.STRING(50),
         allowNull:true
@@ -34,7 +40,11 @@ module.exports = db.defineModel('supervisor', {
         type:db.STRING(50),
         allowNull:true
     },
-    time:{
+    startTime:{
+        type:db.BIGINT,
+        allowNull:true
+    },
+    endTime:{
         type:db.BIGINT,
         allowNull:true
     },

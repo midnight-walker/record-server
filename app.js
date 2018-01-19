@@ -43,12 +43,14 @@ app.use(rest.restify());
 let addRoute=require('./utils/addRoute');
 addRoute(router,__dirname);
 app.use(router.routes());
+if(process.env.NODE_ENV==='local'){
+    app.listen(3000);
+}else{
+    var options = {
+        key: fs.readFileSync('./ssl/214353335480095.key','utf-8'),
+        cert: fs.readFileSync('./ssl/214353335480095.cert','utf-8')
+    };
 
-
-var options = {
-    key: fs.readFileSync('./ssl/214353335480095.key','utf-8'),
-    cert: fs.readFileSync('./ssl/214353335480095.cert','utf-8')
-};
-
-app.listen(3000);
-https.createServer(options, app.callback()).listen(443);
+    app.listen(3000);
+    https.createServer(options, app.callback()).listen(443);
+}
