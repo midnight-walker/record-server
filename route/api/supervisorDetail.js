@@ -2,6 +2,7 @@
  * Created by tqj <2482366539@qq.com> on 2017/8/16.
  */
 const model = require('../../model');
+let moment = require('moment');
 
 var getSupervisorDetail = async (ctx, next) => {
     let page = parseInt(ctx.query.page) - 1,
@@ -9,7 +10,9 @@ var getSupervisorDetail = async (ctx, next) => {
         recordTypeId = parseInt(ctx.query.recordTypeId),
         supervisorId = parseInt(ctx.query.supervisorId),
         projectId = parseInt(ctx.query.projectId),
-        operator = ctx.request.body.operator,
+        startDate=parseInt(ctx.query.startDate),
+        endDate=parseInt(ctx.query.endDate),
+        operator = ctx.query.operator ? ctx.request.body.operator : '',
         query={},
         where={};
 
@@ -28,12 +31,39 @@ var getSupervisorDetail = async (ctx, next) => {
     if(!isNaN(projectId)){
         where=Object.assign({},where,{projectId});
     }
-    if(!isNaN(operator)){
+    console.log(ctx.query.startDate, ctx.query.endDate);
+    if(ctx.query.startDate && ctx.query.endDate &&!isNaN(startDate) && !isNaN(endDate)){
+        where=Object.assign({},where,{
+            createdAt:{
+                $between: [startDate, endDate]
+            }
+        })
+    }
+    if(operator && !isNaN(operator)){
         where=Object.assign({},where,{operator});
     }
     query.where=where;
     query.order='id DESC';
+    query.include=[
+        {
+            model: model.user,
+            attributes: ['username','wxname','phone'],
+        },
+        {
+            model: model.supervisor
+        },
+        {
+            model: model.recordType
+        },
+    ];
+    var supervisorList=await model.supervisor.findAll();
     var supervisorDetails = await model.supervisorDetail.findAll(query);
+    supervisorDetails.forEach(item=>{
+        let supervisor=supervisorList.find(s=>s.id===item.supervisorId);
+        item.supervisor=supervisor?supervisor:{};
+        console.log(item);
+    })
+    console.log(supervisorDetails.dataValues);
     var count = await model.supervisorDetail.count(query);
     ctx.rest(supervisorDetails, count);
 };

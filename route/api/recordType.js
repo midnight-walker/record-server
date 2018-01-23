@@ -11,6 +11,7 @@ var getRecordType = async (ctx, next) => {
             limit: size
         }
     }
+    query.order='type ASC';
     var recordTypes = await model.recordType.findAll(query);
     var count = await model.recordType.count();
     ctx.rest(recordTypes, count);

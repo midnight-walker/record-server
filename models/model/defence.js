@@ -1,7 +1,7 @@
 /**
  * Created by tqj <2482366539@qq.com> on 2017/8/8.
  */
-const db = require('../db');
+const db = require('../../db');
 
 module.exports = db.defineModel('defence', {
     regionId:db.BIGINT,
