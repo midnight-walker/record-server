@@ -21,6 +21,10 @@
                     label="记录类型名">
             </el-table-column>
             <el-table-column
+                    prop="score"
+                    label="扣分数">
+            </el-table-column>
+            <el-table-column
                     prop="level"
                     label="类型等级">
             </el-table-column>

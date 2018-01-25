@@ -8,7 +8,6 @@ module.exports = db.defineModel('supervisor_detail', {
     longitude: db.DOUBLE,
     latitude: db.DOUBLE,
     description:db.STRING(500),
-    recordTypeId: db.INTEGER,
     quantity: db.INTEGER,
     supervisorId: db.INTEGER,
     status: db.INTEGER,

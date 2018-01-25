@@ -11,6 +11,7 @@ module.exports=(
 )=>{
     supervisorDetail.belongsTo(user,{foreignKey: "operator"});
     supervisorDetail.belongsTo(supervisor,{foreignKey: "supervisorId"});
-    supervisorDetail.belongsTo(recordType,{foreignKey: "recordTypeId"});
+    supervisorDetail.belongsToMany(recordType,{through: "supervisor_detail_types"});
+    recordType.belongsToMany(supervisorDetail,{through: "supervisor_detail_types"});
     //user.hasMany(supervisorDetail)
 }

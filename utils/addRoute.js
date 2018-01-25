@@ -42,12 +42,17 @@ module.exports=function (router,dir) {
     // 这里可以用sync是因为启动时只运行一次，不存在性能问题:
     var files = fs.readdirSync(dir + '/route');
     var apiFiles = fs.readdirSync(dir + '/route/api');
+    var printFiles = fs.readdirSync(dir + '/route/print');
     var js_files = files.filter((f)=>{
         return f.endsWith('.js');
     });
     var js_apiFiles = apiFiles.filter((f)=>{
         return f.endsWith('.js');
     });
+    var js_printFiles = printFiles.filter((f)=>{
+        return f.endsWith('.js');
+    });
     add(router,dir,js_files,'/route/');
     add(router,dir,js_apiFiles,'/route/api/');
+    add(router,dir,js_printFiles,'/route/print/');
 }

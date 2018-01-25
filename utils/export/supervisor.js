@@ -24,12 +24,12 @@ function exportExcel (list,regionList,stationList) {
             width:"100"
         },
         {
-            prop:"village",
+            prop:"region",
             label:"区县名",
             width:"100"
         },
         {
-            prop:"village",
+            prop:"station",
             label:"乡镇（林场）名",
             width:"120"
         },
@@ -82,6 +82,11 @@ function exportExcel (list,regionList,stationList) {
             prop:"workGroup",
             label:"施工单位",
             width:"100"
+        },
+        {
+            prop:"workGroup",
+            label:"施工单位联系电话",
+            width:"160"
         },
         {
             prop:"workQuality",
