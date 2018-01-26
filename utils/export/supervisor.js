@@ -128,7 +128,7 @@ function exportExcel (list,regionList,stationList) {
             })
         }
     };
-    return XLSX.write(wb, {type: 'buffer'});
+    return XLSX.write(wb, {type: 'buffer',bookType:"biff8"});
 }
 
 module.exports={

@@ -82,11 +82,9 @@ var createSupervisorDetail = async (ctx, next) => {
     let entity = {},types=[];
     Object.assign(entity, ctx.request.body);
     types=ctx.request.body.recordTypes;
-
+    console.log(entity);
     var supervisorDetail = await model.supervisorDetail.create(entity);
     console.log('created: ' + JSON.stringify(supervisorDetail));
-    console.log(types);
-    console.log(supervisorDetail.id);
     if(types && types.length){
         types.forEach(async (item)=>{
             let supervisorDetailType = await model.supervisorDetailTypes.create({
@@ -94,7 +92,6 @@ var createSupervisorDetail = async (ctx, next) => {
                 recordTypeId:item,
                 operator:supervisorDetail.operator || ''
             });
-            console.log(supervisorDetailType);
         })
     }
     ctx.rest({
