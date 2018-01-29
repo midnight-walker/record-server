@@ -56,8 +56,8 @@ var getSupervisorDetail = async (ctx, next) => {
     query.order = 'id DESC';
     query.include = [
         {
-            model: model.user,
-            attributes: ['username', 'wxname', 'phone'],
+            model: model.member,
+            attributes: ['name', 'wxname', 'phone'],
         },
         {
             model: model.supervisor
