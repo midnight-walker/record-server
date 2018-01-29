@@ -12,7 +12,7 @@ var getSupervisorDetail = async (ctx, next) => {
         projectId = parseInt(ctx.query.projectId),
         startDate = parseInt(ctx.query.startDate),
         endDate = parseInt(ctx.query.endDate),
-        operator = ctx.query.operator ? ctx.request.body.operator : '',
+        memberId = ctx.query.operator ? ctx.request.body.memberId : '',
         onlyError = !!ctx.query.onlyError,
         query = {},
         where = {};
@@ -49,8 +49,8 @@ var getSupervisorDetail = async (ctx, next) => {
             }
         }
     }
-    if (operator && !isNaN(operator)) {
-        where = Object.assign({}, where, {operator});
+    if (memberId && !isNaN(memberId)) {
+        where = Object.assign({}, where, {memberId});
     }
     query.where = where;
     query.order = 'id DESC';
