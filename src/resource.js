@@ -24,6 +24,10 @@ let nav=[
                 "id":"station",
                 "name":"林场"
             },
+            {
+                "id":"member",
+                "name":"监理员"
+            },
         ],
         "prop":"system"
     },

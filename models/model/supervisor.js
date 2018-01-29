@@ -52,7 +52,11 @@ module.exports = db.defineModel('supervisor', {
         type:db.BIGINT,
         allowNull:true
     },
-    workGroupId:{
+    workGroupName:{
+        type:db.STRING(100),
+        allowNull:true
+    },
+    workGroupPhone:{
         type:db.BIGINT,
         allowNull:true
     },

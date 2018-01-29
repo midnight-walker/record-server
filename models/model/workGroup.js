@@ -4,7 +4,7 @@
 const db = require('../../db');
 
 module.exports = db.defineModel('work_group', {
-    password: db.STRING(50),
+    phone: db.BIGINT,
     name: db.STRING(50),
     fullName: db.STRING(50)
 });

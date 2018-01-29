@@ -2,7 +2,7 @@
  * Created by tqj <2482366539@qq.com> on 2017/8/9.
  */
 
-let {checkMemberPath}= require('../utils/auth/index');
+let {checkMemberPath,checkWorkerPath}= require('../utils/auth/index');
 
 module.exports = async (ctx, next) => {
     if (process.env.NODE_ENV === 'local') {
@@ -38,17 +38,20 @@ module.exports = async (ctx, next) => {
             await next();
         } else {
             let user=ctx.session.user;
-            if (user) {
-                if(user.groupid===1){
-                    await next();
-                }else if(checkMemberPath(ctx)){
-                    if(typeof ctx.request.body === 'object'){
-                        ctx.request.body.operator=user.id;
-                    }
-                    await next();
-                }else{
-                    goAway();
+            let member=ctx.session.member;
+            let group=ctx.session.group;
+            if(user){
+                await next();
+            }else if(member.id && checkMemberPath(ctx)){
+                if(typeof ctx.request.body === 'object'){
+                    ctx.request.body.memberId=member.id;
                 }
+                await next();
+            }else if(group.id && checkWorkerPath(ctx)){
+                if(typeof ctx.request.body === 'object'){
+                    ctx.request.body.workGroupId=group.id;
+                }
+                await next();
             }else{
                 goAway();
             }

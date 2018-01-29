@@ -11,6 +11,8 @@ module.exports = db.defineModel('supervisor_detail', {
     recordTypeId: db.INTEGER,
     quantity: db.INTEGER,
     supervisorId: db.INTEGER,
+    memberId: db.INTEGER,
+    workGroupId: db.INTEGER,
     status: db.INTEGER,
     reason: db.STRING(500),
     savedAt: db.BIGINT,

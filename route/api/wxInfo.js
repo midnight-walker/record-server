@@ -38,10 +38,55 @@ WXBizDataCrypt.prototype.decryptData = function (encryptedData, iv) {
     }
 
     return decoded
+};
+
+function handelUser() {
+
+}
+
+function handelGroup() {
+
+}
+
+var validateGroup=async (ctx, next) => {
+    if(ctx.session.group){
+        ctx.rest(0);
+        return;
+    }
+    let phone=parseInt(ctx.query.phone);
+    if(!isNaN(phone)){
+        var group = await model.workGroup.find({
+            where: {
+                phone
+            }
+        });
+        if(!group){
+            var worker=await model.supervisor.findOne({
+                attributes: ['workGroupName', 'workGroupPhone'],
+                where: {
+                    workGroupPhone:phone
+                }
+            });
+            if(worker){
+                let params = {
+                    name: worker.workGroupName,
+                    phone: phone,
+                    fullName: worker.workGroupName
+                };
+                group = await model.workGroup.create(params);
+            }else{
+                throw new Error('无权限');
+            }
+        }
+        ctx.session.group=group;
+        ctx.rest(1);
+    }else{
+        throw new Error('手机号错误');
+    }
 }
 
 var validateWx=async (ctx, next) => {
-    if(ctx.session.user){
+    if(ctx.session.member){
         ctx.rest(0);
         return;
     }
@@ -63,22 +108,24 @@ var validateWx=async (ctx, next) => {
     var iv = ctx.query.iv;
     var pc = new WXBizDataCrypt(appId, sessionKey)
     var data = pc.decryptData(encryptedData , iv)
-    var user = await model.user.find({
+    var member = await model.member.find({
         where: {
             $or: [{wxid: data.openId}, {wxname: data.nickName}]
         }
     });
-    if(!user){
+
+    if(!member){
         throw new Error('没有权限，请联系管理员添加');
     }else{
-        if(!user.wxid){
-            user.wxid = data.openId;
-            user.updatedAt = Date.now();
+        if(!member.wxid){
+            member.wxid = data.openId;
+            member.updatedAt = Date.now();
+            await member.save();
         }
-        await user.save();
-        ctx.session.user=user;
+        ctx.session.member=member;
         ctx.rest(1);
     }
+
 }
 
 
