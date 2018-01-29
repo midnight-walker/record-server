@@ -42,12 +42,12 @@ module.exports = async (ctx, next) => {
             let group=ctx.session.group;
             if(user){
                 await next();
-            }else if(member.id && checkMemberPath(ctx)){
+            }else if(member && member.id && checkMemberPath(ctx)){
                 if(typeof ctx.request.body === 'object'){
                     ctx.request.body.memberId=member.id;
                 }
                 await next();
-            }else if(group.id && checkWorkerPath(ctx)){
+            }else if(group && group.id && checkWorkerPath(ctx)){
                 if(typeof ctx.request.body === 'object'){
                     ctx.request.body.workGroupId=group.id;
                 }
