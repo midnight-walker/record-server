@@ -7,6 +7,7 @@ let moment = require('moment');
 var getSupervisorDetail = async (ctx, next) => {
     let page = parseInt(ctx.query.page) - 1,
         size = parseInt(ctx.query.pageSize),
+        id=parseInt(ctx.query.id),
         recordTypeId = parseInt(ctx.query.recordTypeId),
         supervisorId = parseInt(ctx.query.supervisorId),
         projectId = parseInt(ctx.query.projectId),
@@ -22,6 +23,9 @@ var getSupervisorDetail = async (ctx, next) => {
             offset: page * size,
             limit: size
         }
+    }
+    if (!isNaN(id)) {
+        where = Object.assign({}, where, {id});
     }
     if (!isNaN(recordTypeId)) {
         where = Object.assign({}, where, {recordTypeId});
