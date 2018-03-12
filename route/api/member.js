@@ -46,9 +46,18 @@ var updateMembers = async (ctx, next) => {
     });
 };
 
+var getMemberList = async (ctx, next) => {
+    var members = await model.member.findAll({
+        attributes: ['id', 'name','wxname']
+    });
+    var count = await model.member.count();
+    ctx.rest(members, count);
+};
+
 module.exports = {
     'GET /api/members': getMembers,
     'POST /api/members': createMembers,
     'PATCH /api/members/:id': updateMembers,
-    'DELETE /api/members/:id': deleteMembers
+    'DELETE /api/members/:id': deleteMembers,
+    'GET /api/members/list': getMemberList,
 };

@@ -2,6 +2,7 @@
  * Created by tqj <2482366539@qq.com> on 2017/8/16.
  */
 const model = require('../../model');
+const Sequelize = require('sequelize');
 let moment = require('moment');
 
 var getSupervisorDetail = async (ctx, next) => {
@@ -13,17 +14,11 @@ var getSupervisorDetail = async (ctx, next) => {
         projectId = parseInt(ctx.query.projectId),
         startDate = parseInt(ctx.query.startDate),
         endDate = parseInt(ctx.query.endDate),
-        memberId = ctx.query.operator ? ctx.request.body.memberId : '',
+        memberId = ctx.query.memberId ? ctx.query.memberId : '',
         onlyError = !!ctx.query.onlyError,
         query = {},
         where = {};
 
-    if (!isNaN(page) && !isNaN(size)) {
-        query = {
-            offset: page * size,
-            limit: size
-        }
-    }
     if (!isNaN(id)) {
         where = Object.assign({}, where, {id});
     }
@@ -57,7 +52,7 @@ var getSupervisorDetail = async (ctx, next) => {
         where = Object.assign({}, where, {memberId});
     }
     query.where = where;
-    query.order = 'id DESC';
+    query.order = [['id','DESC']];
     query.include = [
         {
             model: model.member,
@@ -68,6 +63,12 @@ var getSupervisorDetail = async (ctx, next) => {
         },
         includeRecordType
     ];
+
+    if (!isNaN(page) && !isNaN(size)) {
+        query.offset= page * size;
+        query.limit=size;
+    }
+
     var supervisorList = await model.supervisor.findAll();
     var supervisorDetails = await model.supervisorDetail.findAll(query);
     var count = await model.supervisorDetail.count(query);

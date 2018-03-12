@@ -9,7 +9,7 @@
                 border
                 style="width: 100%">
             <el-table-column
-                    prop="operator"
+                    prop="member.name"
                     label="操作人员">
             </el-table-column>
             <el-table-column
