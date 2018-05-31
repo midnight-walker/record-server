@@ -99,7 +99,12 @@ function checkWorkerPath(ctx) {
     })
 }
 
+function checkWebPath(ctx) {
+    return ctx.request.path.startsWith('/web') || (ctx.request.path.startsWith('/api') && ctx.request.method==='GET');
+}
+
 module.exports={
     checkMemberPath,
-    checkWorkerPath
+    checkWorkerPath,
+    checkWebPath
 }

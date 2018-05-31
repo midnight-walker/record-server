@@ -88,7 +88,7 @@
         position: absolute;
         left: 207px;
         top: 20px;
-        background: url(./img/sidebar.png) no-repeat center;
+        background: url(img/sidebar.png) no-repeat center;
         background-size: 143%;
         border: 0;
         z-index: 1;

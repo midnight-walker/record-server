@@ -65,11 +65,17 @@
     }
 </style>
 <script type="text/ecmascript-6">
-    let nav = require('../resource').nav;
+    let res = require('../resource');
 
     export default {
         props: ["activeKey"],
         data() {
+            let path=window.location.pathname,nav;
+            if(path && path.indexOf('/web')===0){
+                nav=res.web
+            }else{
+                nav=res.admin
+            }
             return {
                 nav
             }

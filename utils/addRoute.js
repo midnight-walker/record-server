@@ -43,6 +43,7 @@ module.exports=function (router,dir) {
     var files = fs.readdirSync(dir + '/route');
     var apiFiles = fs.readdirSync(dir + '/route/api');
     var printFiles = fs.readdirSync(dir + '/route/print');
+    var webFiles = fs.readdirSync(dir + '/route/web');
     var js_files = files.filter((f)=>{
         return f.endsWith('.js');
     });
@@ -52,7 +53,11 @@ module.exports=function (router,dir) {
     var js_printFiles = printFiles.filter((f)=>{
         return f.endsWith('.js');
     });
+    var js_webFiles = webFiles.filter((f)=>{
+        return f.endsWith('.js');
+    });
     add(router,dir,js_files,'/route/');
     add(router,dir,js_apiFiles,'/route/api/');
     add(router,dir,js_printFiles,'/route/print/');
+    add(router,dir,js_webFiles,'/route/web/');
 }

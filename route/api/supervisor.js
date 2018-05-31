@@ -8,6 +8,7 @@ let {exportExcel} = require('../../utils/export/supervisor');
 var getSupervisor = async (ctx, next) => {
     let page = parseInt(ctx.query.page) - 1,
         size = parseInt(ctx.query.pageSize),
+        id=parseInt(ctx.query.id),
         recordTypeId = parseInt(ctx.query.recordTypeId),
         supervisorId = parseInt(ctx.query.supervisorId),
         projectId = parseInt(ctx.query.projectId),
@@ -22,6 +23,9 @@ var getSupervisor = async (ctx, next) => {
     }
     if(!isNaN(projectId)){
         where=Object.assign({},where,{projectId});
+    }
+    if(!isNaN(id)){
+        where=Object.assign({},where,{id});
     }
     query.where=where;
     var supervisors = await model.supervisor.findAll(query);

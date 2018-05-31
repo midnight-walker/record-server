@@ -3,7 +3,7 @@ const CopyWebpackExternalsManifest = require('copy-webpack-externals-manifest')
 const ExtractTextPlugin = require("extract-text-webpack-plugin")
 
 module.exports = {
-    entry: utils.entry("./src/**/index.js"),
+    entry: utils.entry("./src/**/**/index.js"),
     output: utils.output,
     plugins: [
         ...utils.plugins,

@@ -4,9 +4,12 @@
 const db = require('../../db');
 
 module.exports = db.defineModel('monitor', {
-    regionId:db.BIGINT,
-    stationId:db.BIGINT,
-    stationName:{
+    region:{
+        type:db.STRING(50),
+        allowNull:true
+    },
+    projectId:db.INTEGER,
+    station:{
         type:db.STRING(50),
         allowNull:true
     },
@@ -42,60 +45,6 @@ module.exports = db.defineModel('monitor', {
         type:db.BIGINT,
         allowNull:true
     },
-    happenLevel:{
-        type:db.STRING(50),
-        allowNull:true
-    },
-    harmLevel:{
-        type:db.STRING(50),
-        allowNull:true
-    },
-    treeName:{
-        type:db.STRING(50),
-        allowNull:true
-    },
-    witheredNumer:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    burnNumber:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    breakNumber:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    downNumber:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    landslideNumber:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    wormPercent:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    wormDensity:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    illIndex:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    longitude:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    latitude:{
-        type:db.DOUBLE,
-        allowNull:true
-    },
-    picture:{
-        type:db.STRING(5000),
-        allowNull:true
-    }
+    treeDensity:db.DOUBLE,
+    crownDensity:db.DOUBLE,
 });

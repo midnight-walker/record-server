@@ -11,7 +11,7 @@ let resourceMap;
 
 module.exports = function (ctx, pageName, model) {
     resourceMap = require("../static/manifest.json");
-
+    const AMAP_KEY = '63d7a66c5e7db7e03cdb624b86034890';
     let linkList = "";
     let scriptList = "";
 
@@ -62,6 +62,7 @@ module.exports = function (ctx, pageName, model) {
     <script src="//cdn.bootcss.com/moment.js/2.20.1/moment.min.js"></script>
     <script src="//cdn.bootcss.com/vue/2.5.8/vue.runtime.js"></script>
     <script src="//cdn.bootcss.com/element-ui/2.0.11/index.js"></script>
+    <!--<script type="text/javascript" src="http://webapi.amap.com/maps?v=1.4.4&key=${AMAP_KEY}"></script>-->
     ${scriptList}
     </body>
     </html>`;

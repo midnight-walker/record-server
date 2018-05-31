@@ -1,4 +1,4 @@
-let nav=[
+let admin=[
     {
         "name":"首页",
         "list":[
@@ -59,11 +59,20 @@ let nav=[
             {
                 "id":"supervisor",
                 "name":"监理点"
+            },
+            {
+                "id":"monitor",
+                "name":"监测点"
             }
         ],
         "prop":"voucher"
     }
 ]
+
+let web=[
+
+]
 module.exports={
-    nav
+    admin,
+    web
 }

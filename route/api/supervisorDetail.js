@@ -52,7 +52,7 @@ var getSupervisorDetail = async (ctx, next) => {
         where = Object.assign({}, where, {memberId});
     }
     query.where = where;
-    query.order = [['id','DESC']];
+    query.order = [['savedAt','ASC']];
     query.include = [
         {
             model: model.member,

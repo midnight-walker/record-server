@@ -2,7 +2,7 @@
  * Created by tqj <2482366539@qq.com> on 2017/8/9.
  */
 
-let {checkMemberPath,checkWorkerPath}= require('../utils/auth/index');
+let {checkWebPath,checkMemberPath,checkWorkerPath}= require('../utils/auth/index');
 
 module.exports = async (ctx, next) => {
     if (process.env.NODE_ENV === 'local') {
@@ -13,7 +13,6 @@ module.exports = async (ctx, next) => {
                 phone: 13333333333,
                 id: 1,
             };
-            console.log('gege');
             await next();
         }else{
             await next();
@@ -51,6 +50,8 @@ module.exports = async (ctx, next) => {
                 if(typeof ctx.request.body === 'object'){
                     ctx.request.body.workGroupId=group.id;
                 }
+                await next();
+            }else if(checkWebPath(ctx)){
                 await next();
             }else{
                 goAway();
