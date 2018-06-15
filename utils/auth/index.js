@@ -54,6 +54,10 @@ const memberPath=[
         method:'GET',
         path:'/api/members/list'
     },
+    {
+        method:'POST',
+        path:'/api/monitor'
+    },
 ];
 
 function checkMemberPath(ctx) {
