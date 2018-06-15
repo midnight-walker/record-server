@@ -11,6 +11,7 @@ var getMonitor = async (ctx, next) => {
         id=parseInt(ctx.query.id),
         monitorId = parseInt(ctx.query.monitorId),
         projectId = parseInt(ctx.query.projectId),
+        placeName=ctx.query.placeName,
         query={},
         where={};
 
@@ -26,6 +27,14 @@ var getMonitor = async (ctx, next) => {
     if(!isNaN(id)){
         where=Object.assign({},where,{id});
     }
+    if(placeName){
+        where=Object.assign({},where,{
+            placeName: {
+                $like: '%'+placeName+'%'
+            }
+        });
+    }
+
     query.where=where;
     var monitors = await model.monitor.findAll(query);
     var count = await model.monitor.count(query);
@@ -46,9 +55,8 @@ var createMonitor = async (ctx, next) => {
     Object.assign(entity,ctx.request.body);
 
     var monitor = await model.monitor.create(entity);
-    console.log('created: ' + JSON.stringify(monitor));
     ctx.rest({
-        success: true
+        id: monitor.id
     });
 };
 

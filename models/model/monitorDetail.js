@@ -19,7 +19,10 @@ module.exports = db.defineModel('monitor_detail', {
         type: db.STRING(500),
         allowNull: true
     },
-    status:db.INTEGER,
+    status:{
+        type: db.INTEGER,
+        allowNull: true
+    },
     memberId: {
         type: db.INTEGER,
         allowNull: true

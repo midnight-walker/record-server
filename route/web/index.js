@@ -18,8 +18,16 @@ var supervisorWeb = async (ctx, next) => {
         id:parseInt(ctx.params.id)
     });
 };
+
+var monitorDetailWeb = async (ctx, next) => {
+    ctx.response.body = render(ctx,'monitorDetailWeb',{
+
+    });
+};
+
 module.exports = {
     'GET /web': indexWeb,
     'GET /web/project/:id': projectWeb,
     'GET /web/supervisor/:id': supervisorWeb,
+    'GET /web/monitorDetail': monitorDetailWeb,
 };

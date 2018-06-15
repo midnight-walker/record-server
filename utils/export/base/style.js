@@ -83,6 +83,27 @@ let defaultInfoStyle={
         sz: "10",
     }
 };
+let defaultInfoCenterStyle={
+    alignment: {
+        horizontal: "center",
+        vertical: "center"
+    },
+    font:{
+        name:"宋体",
+        sz: "10",
+    },
+    fill:{
+        fgColor:{
+            rgb:"ffffff"
+        }
+    },
+    border:{
+        top:defaultBorderStyle,
+        bottom:defaultBorderStyle,
+        left:defaultBorderStyle,
+        right:defaultBorderStyle,
+    }
+};
 let defaultInfoRightStyle={
     alignment: {
         horizontal: "right"
@@ -98,6 +119,7 @@ module.exports={
     defaultBodyStyle,
     defaultTitleStyle,
     defaultInfoStyle,
+    defaultInfoCenterStyle,
     defaultInfoRightStyle,
     defaultBodyAmtStyle
 };

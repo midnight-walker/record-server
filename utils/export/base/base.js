@@ -42,7 +42,7 @@ function createExcel({head = {}, startRow = 1, columns, body, footer = {}, merge
 
     let data;
     //用于容错后端数据缺失，body内没有数据
-    if (body) {
+    if (body && body.length) {
         data = body
             .map((v, i) => columns.map((k, j) => {
                     let value=v[k['prop']];

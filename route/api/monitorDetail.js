@@ -4,6 +4,7 @@
 const model = require('../../model');
 const Sequelize = require('sequelize');
 let moment = require('moment');
+let {exportExcel} = require('../../utils/export/monitorDetail');
 
 var getMonitorDetail = async (ctx, next) => {
     let page = parseInt(ctx.query.page) - 1,
@@ -14,6 +15,11 @@ var getMonitorDetail = async (ctx, next) => {
         startDate = parseInt(ctx.query.startDate),
         endDate = parseInt(ctx.query.endDate),
         memberId = ctx.query.memberId ? ctx.query.memberId : '',
+        region = ctx.query.region,
+        station = ctx.query.station,
+        village = ctx.query.village,
+        smallClass = ctx.query.smallClass,
+        placeName = ctx.query.placeName,
         query = {},
         where = {};
 
@@ -36,6 +42,45 @@ var getMonitorDetail = async (ctx, next) => {
     if (memberId && !isNaN(memberId)) {
         where = Object.assign({}, where, {memberId});
     }
+
+    let monitorWhere={};
+    if(region){
+        monitorWhere=Object.assign({},monitorWhere,{
+            region: {
+                $like: '%'+region+'%'
+            }
+        });
+    }
+    if(station){
+        monitorWhere=Object.assign({},monitorWhere,{
+            station: {
+                $like: '%'+station+'%'
+            }
+        });
+    }
+    if(village){
+        monitorWhere=Object.assign({},monitorWhere,{
+            village: {
+                $like: '%'+village+'%'
+            }
+        });
+    }
+    if(smallClass){
+        monitorWhere=Object.assign({},monitorWhere,{
+            smallClass: {
+                $like: '%'+smallClass+'%'
+            }
+        });
+    }
+    if(placeName){
+        monitorWhere=Object.assign({},monitorWhere,{
+            placeName: {
+                $like: '%'+placeName+'%'
+            }
+        });
+    }
+
+
     query.where = where;
     query.order = [['savedAt','ASC']];
     query.include = [
@@ -44,7 +89,8 @@ var getMonitorDetail = async (ctx, next) => {
             attributes: ['name', 'wxname', 'phone'],
         },
         {
-            model: model.monitor
+            model: model.monitor,
+            where:monitorWhere
         },
         {
             model:model.monitorDetailDescription
@@ -56,10 +102,80 @@ var getMonitorDetail = async (ctx, next) => {
         query.limit=size;
     }
 
-    var monitorList = await model.monitor.findAll();
     var monitorDetails = await model.monitorDetail.findAll(query);
     var count = await model.monitorDetail.count(query);
     ctx.rest(monitorDetails, count);
+};
+
+var exportMonitorDetail  = async (ctx, next) => {
+    let region = ctx.query.region,
+        station = ctx.query.station,
+        village = ctx.query.village,
+        smallClass = ctx.query.smallClass,
+        placeName = ctx.query.placeName,
+        query = {},
+        where = {};
+
+    let monitorWhere={},fileName="";
+    if(region){
+        monitorWhere=Object.assign({},monitorWhere,{
+            region: {
+                $like: '%'+region+'%'
+            }
+        });
+        fileName+=region;
+    }
+    if(station){
+        monitorWhere=Object.assign({},monitorWhere,{
+            station: {
+                $like: '%'+station+'%'
+            }
+        });
+        fileName+=station;
+    }
+    if(village){
+        monitorWhere=Object.assign({},monitorWhere,{
+            village: {
+                $like: '%'+village+'%'
+            }
+        });
+        fileName+=village;
+    }
+    if(smallClass){
+        monitorWhere=Object.assign({},monitorWhere,{
+            smallClass: {
+                $like: '%'+smallClass+'%'
+            }
+        });
+        fileName+=smallClass;
+    }
+    if(placeName){
+        monitorWhere=Object.assign({},monitorWhere,{
+            placeName: {
+                $like: '%'+placeName+'%'
+            }
+        });
+        fileName+=placeName;
+    }
+
+
+    query.where = where;
+    query.order = [['savedAt','ASC']];
+    query.include = [
+        {
+            model: model.member,
+            attributes: ['name', 'wxname', 'phone'],
+        },
+        {
+            model: model.monitor,
+            where:monitorWhere
+        }
+    ];
+
+    var monitorDetails = await model.monitorDetail.findAll(query);
+
+    let data=exportExcel(monitorDetails);
+    ctx.sendExcel(data,ctx.req,ctx.res,fileName+'.xlsx');
 };
 
 var deleteMonitorDetail = async (ctx, next) => {
@@ -115,8 +231,9 @@ var updateMonitorDetail = async (ctx, next) => {
 
 module.exports = {
     'GET /api/monitorDetail': getMonitorDetail,
+    'GET /api/monitorDetail/export': exportMonitorDetail,
     'POST /api/monitorDetail': createMonitorDetail,
     'POST /api/createMonitorDetailDescription': createMonitorDetailDescription,
     'PATCH /api/monitorDetail/:id': updateMonitorDetail,
-    'DELETE /api/monitorDetail/:id': deleteMonitorDetail
+    'DELETE /api/monitorDetail/:id': deleteMonitorDetail,
 };
