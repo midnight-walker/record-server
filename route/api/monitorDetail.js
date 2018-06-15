@@ -157,7 +157,7 @@ var exportMonitorDetail  = async (ctx, next) => {
         });
         fileName+=placeName;
     }
-
+    fileName=fileName?fileName:'所有';
 
     query.where = where;
     query.order = [['savedAt','ASC']];

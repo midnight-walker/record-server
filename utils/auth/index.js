@@ -60,7 +60,7 @@ const memberPath=[
     },
     {
         method:'POST',
-        path:'/api/monitorDetail'
+        path:'/api/createMonitorDetailDescription'
     },
 ];
 
