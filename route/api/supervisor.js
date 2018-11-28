@@ -33,6 +33,20 @@ var getSupervisor = async (ctx, next) => {
     ctx.rest(supervisors, count);
 };
 
+var getSupervisorAll = async (ctx, next) => {
+    let projectId = parseInt(ctx.query.projectId),
+        query={},
+        where={};
+
+    if(!isNaN(projectId)){
+        where=Object.assign({},where,{projectId});
+    }
+    query.where=where;
+    query.attributes = ['id','region','station','village','group','smallClass', 'placeName','smallClassArea'];
+    var supervisors = await model.supervisor.findAll(query);
+    ctx.rest(supervisors);
+};
+
 var deleteSupervisor = async (ctx, next) => {
     let params = {id: parseInt(ctx.params.id)};
     var supervisor = await model.supervisor.find({where: params});
@@ -91,6 +105,7 @@ var updateSupervisor = async (ctx, next) => {
 
 module.exports = {
     'GET /api/supervisor': getSupervisor,
+    'GET /api/supervisorAll': getSupervisorAll,
     'GET /api/supervisor/export': exportSupervisor,
     'POST /api/supervisor': createSupervisor,
     'POST /api/supervisor/import': importSupervisor,

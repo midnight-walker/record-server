@@ -17,6 +17,17 @@ var getRecordType = async (ctx, next) => {
     ctx.rest(recordTypes, count);
 };
 
+var getRecordTypeAll = async (ctx, next) => {
+    let query={},
+        where={
+            level:2
+        };
+    query.where=where;
+    query.attributes = ['id','name','score','level','description'];
+    var recordTypes = await model.recordType.findAll(query);
+    ctx.rest(recordTypes);
+};
+
 var deleteRecordType = async (ctx, next) => {
     let params = {id: parseInt(ctx.params.id)};
     let son=await model.recordType.findAll({
@@ -72,6 +83,7 @@ var updateRecordType = async (ctx, next) => {
 
 module.exports = {
     'GET /api/recordType': getRecordType,
+    'GET /api/recordTypeAll': getRecordTypeAll,
     'POST /api/recordType': createRecordType,
     'PATCH /api/recordType/:id': updateRecordType,
     'DELETE /api/recordType/:id': deleteRecordType
