@@ -63,6 +63,10 @@ let admin=[
             {
                 "id":"monitor",
                 "name":"监测点"
+            },
+            {
+                "id":"supervisorTotal",
+                "name":"监理统计"
             }
         ],
         "prop":"voucher"
