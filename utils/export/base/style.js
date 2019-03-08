@@ -1,7 +1,13 @@
 /**
  * Created by tqj <2482366539@qq.com> on 2017/9/20.
  */
-
+let highlightStyle={
+    fill:{
+        fgColor:{
+            rgb:"ff0000"
+        }
+    }
+};
 let defaultBorderStyle={
     style:"thin",
     color:{
@@ -74,6 +80,16 @@ let defaultTitleStyle={
         bold:"true"
     }
 };
+let defaultLeftTitleStyle={
+    alignment: {
+        vertical: "center",
+        horizontal: "left"
+    },
+    font:{
+        name:"宋体",
+        sz: "12"
+    }
+};
 let defaultInfoStyle={
     alignment: {
         horizontal: "left"
@@ -114,10 +130,12 @@ let defaultInfoRightStyle={
     }
 };
 module.exports={
+    highlightStyle,
     defaultBorderStyle,
     defaultHeadStyle,
     defaultBodyStyle,
     defaultTitleStyle,
+    defaultLeftTitleStyle,
     defaultInfoStyle,
     defaultInfoCenterStyle,
     defaultInfoRightStyle,

@@ -10,8 +10,8 @@
                         :value="project.id"
                 ></el-option>
             </el-select>
-            <el-button type="primary" icon="plus" @click="handleImport">导入监理记录表</el-button>
-            <el-button type="primary" icon="plus" @click="handleExport">导出统计数据</el-button>
+            <el-button type="primary" icon="plus" @click="handleImport">导出单次监理汇总</el-button>
+            <el-button type="primary" icon="plus" @click="handleImportTotal">导出统计数据</el-button>
         </el-row>
         <el-table
                 :data="tableData"
@@ -51,6 +51,17 @@
                     label="小班面积（亩）">
             </el-table-column>
             <el-table-column
+                    prop="visitTime"
+                    label="监理时间">
+                <template slot-scope="scope">
+                    {{scope.row.visitTime}}
+                </template>
+            </el-table-column>
+            <el-table-column
+                    prop="visited"
+                    label="除治完成">
+            </el-table-column>
+            <el-table-column
                     prop="score"
                     label="扣分合计">
             </el-table-column>
@@ -82,6 +93,8 @@
 </style>
 <script>
     import downExcel from '../../components/script/xlsx';
+    import baseExcel from '../../components/script/base';
+    import excelHelper from './excelHelper';
     export default {
         metaInfo() {
             return {
@@ -136,7 +149,11 @@
                     })
                 ]).then(res => {
                     if(res[0].success && res[1].success){
-                        res[0].data.forEach(item=>item.score=0);
+                        res[0].data.forEach(item=>{
+                            item.score=0;
+                            item.visited="否";
+                            item.visitTime="";
+                        });
                         this.$set(this, 'tableData', res[0].data);
                         this.$set(this, 'recordTypeData', res[1].data);
                     }
@@ -161,7 +178,6 @@
                 let files = e.target.files;
                 let file = files[0];
                 if (!file) return;
-                this.isLoading = true;
                 let name = file.name;
                 if (typeof name !== 'string' || !~name.indexOf('.xls')) {
                     this.$message.error('文件格式错误');
@@ -197,8 +213,10 @@
                             let supervisor=this.tableData.find(supervisor=>supervisor.id==item.supervisorId)
 
                             if(supervisor){
-                                supervisor.score+=_.round(recordType.score*item.quantity, 2);;
-                                console.log(supervisor.score);
+                                let score=item.score || recordType.score;
+                                supervisor.score+=_.round(score*item.quantity, 2);
+                                supervisor.visitTime=moment(item.savedAt,'YYYY-M-D').format('YYYY年M月D日');
+                                supervisor.visited="是";
                             }else{
                                 this.errorList.push('第'+item.index+'行有错误：监理编号:'+item.supervisorId+'不存在！');
                                 console.log(item);
@@ -211,9 +229,20 @@
                     if(this.errorList.length){
                         this.dialogVisible=true;
                     }else{
-                        window.setTimeout(()=>{
+                        console.log(this.tableData);
+                        let conf=excelHelper.transferData(this.tableData);
+                        console.log(conf);
+                        let wb = {
+                            SheetNames: ['sheet1'],
+                            Sheets: {
+                                'sheet1': baseExcel.createExcel(conf)
+                            }
+                        };
+                        downExcel.downloadExl(wb);
+                        //downExcel.downloadExl(excelHelper.transfer(result));
+                        /*window.setTimeout(()=>{
                             downExcel.downloadExl(XLSX.utils.table_to_book(document.getElementById('scoreData')))
-                        },500)
+                        },500)*/
                     }
 
                 };
@@ -257,11 +286,85 @@
                 }
                 return result;
             },
-            handleExport() {
+            getSingleData(data){
+                function getVal(cell) {
+                    return (cell && typeof cell === 'object') ? cell.v : '';
+                }
+
+                let result = [], idx = 0;
+                let i = 2;
+                while (true) {
+                    let item={};
+                    let A = getVal(data['A' + i]);
+                    if (A === '' || i >= 10000) {
+                        break;
+                    }
+                    item.supervisorId = getVal(data['A' + i]);
+                    item.region = getVal(data['B' + i]);
+                    item.station = getVal(data['C' + i]);
+                    item.village = getVal(data['D' + i]);
+                    item.group = getVal(data['E' + i]);
+                    item.smallClass = getVal(data['F' + i]);
+                    item.placeName = getVal(data['G' + i]);
+                    item.smallClassArea = getVal(data['H' + i]);
+                    item.visitTime = getVal(data['I' + i]);
+                    item.visited = getVal(data['J' + i]);
+                    item.score = getVal(data['K' + i]);
+
+
+                    result.push(item);
+                    i++;
+                }
+                return result;
+            },
+
+            handleImportTotal() {
                 if (!this.query.projectId) {
-                    this.$message.error('选择要导出的项目！');
+                    this.$message.error('选择要导入的项目！');
                     return;
                 }
+                let input = $("<input type='file'/>");
+                input.trigger('click');
+                input.off('change').on('change', this.handleTotalFile);
+            },
+            handleTotalFile(e){
+                let files = e.target.files;
+                let file = files[0];
+                if(!file) return;
+                this.isLoading=true;
+                let name = file.name;
+                if(typeof name!=='string'||!~name.indexOf('.xls')){
+                    this.$message.error('文件格式错误');
+                    return;
+                }
+                let result=[];
+                let reader = new FileReader();
+                let isOK = true;
+                reader.onload = (e)=> {
+                    let data = e.target.result;
+                    let wb;
+                    try{
+                        wb = XLSX.read(data, { type: "binary" });
+                    }catch (e){
+                        this.$message.error('文件格式错误');
+                        return;
+                    }
+                    let result=[];
+                    wb.SheetNames.forEach((name,idx)=>{
+                        let data=this.getSingleData(wb.Sheets[name]);
+                        let groupedData=_.groupBy(data,'station');
+                        let arr = [];
+                        for (let key in groupedData) {
+                            let o = {};
+                            arr.push(groupedData[key])
+                        }
+                        if(data && data.length){
+                            result=result.concat([arr]);
+                        }
+                    });
+                    downExcel.downloadExl(excelHelper.totalData(result),'评分一览表');
+                };
+                reader.readAsBinaryString(file);
             }
         }
     }

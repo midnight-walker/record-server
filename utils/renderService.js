@@ -56,7 +56,7 @@ module.exports = function (ctx, pageName, model) {
     </head>
     <body>
     <div id="app"></div>
-    <script type="text/javascript" src="//cdn.bootcss.com/xlsx/0.11.17/xlsx.full.min.js"></script>
+    <script type="text/javascript" src="//ljb-image.test.upcdn.net/xlsx.full.min.js"></script>
     <script type="text/javascript" src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
     <script src="//cdn.bootcss.com/lodash.js/4.17.4/lodash.min.js"></script>
     <script src="//cdn.bootcss.com/moment.js/2.20.1/moment.min.js"></script>
