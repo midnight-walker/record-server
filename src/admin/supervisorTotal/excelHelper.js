@@ -84,7 +84,7 @@ let excelHelper={
             startRow:1
         };
     },
-    totalData:(data)=>{
+    totalData:(data,titleName)=>{
         if(data.length<1){
             return;
         }
@@ -92,7 +92,7 @@ let excelHelper={
         let baseData=data[0],Sheets={},titles=[];
         let head={
             "A1":{
-                v:"綦江区2018年松材线虫病除治质量监理乡镇小班评分结果一览表",
+                v:titleName,
                 s:defaultTitleStyle
             },
             "A5":{

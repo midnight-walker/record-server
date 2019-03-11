@@ -11,7 +11,7 @@
                 ></el-option>
             </el-select>
             <el-button type="primary" icon="plus" @click="handleImport">导出单次监理汇总</el-button>
-            <el-button type="primary" icon="plus" @click="handleImportTotal">导出统计数据</el-button>
+            <el-button type="primary" icon="plus" @click="titleDialogVisible=true">导出统计数据</el-button>
         </el-row>
         <el-table
                 :data="tableData"
@@ -71,6 +71,18 @@
             <p v-for="error in errorList">{{error}}</p>
         </el-dialog>
 
+        <el-dialog title="开始生成一览表" :visible.sync="titleDialogVisible">
+            <el-form :model="titleForm" label-width="120px">
+                <el-form-item label="标题" prop="name">
+                    <el-input v-model="titleForm.name"></el-input>
+                </el-form-item>
+            </el-form>
+            <div slot="footer" class="dialog-footer">
+                <el-button @click="handleImportTotal" type="primary">开始导入</el-button>
+                <el-button @click="titleDialogVisible=false">取消</el-button>
+            </div>
+        </el-dialog>
+
     </layout>
 </template>
 <style lang="less" type="text/less">
@@ -109,6 +121,10 @@
                 tableData: [],
                 recordTypeData:[],
                 dialogVisible:false,
+                titleDialogVisible:false,
+                titleForm:{
+                    name:''
+                },
                 errorList:[],
                 query: {
                 },
@@ -214,7 +230,7 @@
 
                             if(supervisor){
                                 let score=item.score || recordType.score;
-                                supervisor.score+=_.round(score*item.quantity, 2);
+                                supervisor.score=_.round(supervisor.score+score*item.quantity, 2);
                                 supervisor.visitTime=moment(item.savedAt,'YYYY-M-D').format('YYYY年M月D日');
                                 supervisor.visited="是";
                             }else{
@@ -331,7 +347,6 @@
                 let files = e.target.files;
                 let file = files[0];
                 if(!file) return;
-                this.isLoading=true;
                 let name = file.name;
                 if(typeof name!=='string'||!~name.indexOf('.xls')){
                     this.$message.error('文件格式错误');
@@ -362,7 +377,8 @@
                             result=result.concat([arr]);
                         }
                     });
-                    downExcel.downloadExl(excelHelper.totalData(result),'评分一览表');
+                    this.titleDialogVisible=false;
+                    downExcel.downloadExl(excelHelper.totalData(result,this.titleForm.name),this.titleForm.name);
                 };
                 reader.readAsBinaryString(file);
             }
