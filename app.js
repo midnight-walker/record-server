@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Created by tqj <2482366539@qq.com> on 2017/8/7.
  */
 const Koa = require('koa');
@@ -47,8 +47,8 @@ if(process.env.NODE_ENV==='local'){
     app.listen(3000);
 }else{
     var options = {
-        key: fs.readFileSync('./ssl/214353335480095.key','utf-8'),
-        cert: fs.readFileSync('./ssl/214353335480095.cert','utf-8')
+        key: fs.readFileSync('./ssl/2053665_www.94oo.top.key','utf-8'),
+        cert: fs.readFileSync('./ssl/2053665_www.94oo.top_public.crt','utf-8')
     };
 
     app.listen(3000);
