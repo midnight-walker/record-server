@@ -55,7 +55,7 @@
     "koa-2-webpack-dev-middleware": "latest",
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.1.0",
-    "sequelize": "3.24.1",
+    "sequelize": "5.21.3",
     "mysql": "2.11.1",
     "node-uuid": "^1.4.8",
     "koa-session2": "^2.2.4",
