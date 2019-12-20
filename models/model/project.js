@@ -5,5 +5,8 @@ const db = require('../../db');
 
 module.exports = db.defineModel('project', {
     name: db.STRING(100),
-    description: db.STRING(200)
+    description: db.STRING(200),
+    standard: db.TEXT,
+    notice: db.TEXT,
+    scoreSheet: db.TEXT,
 });

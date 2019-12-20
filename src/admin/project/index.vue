@@ -3,7 +3,48 @@
         <el-row class="tool-bar">
             <el-button type="primary" icon="plus" @click="handleAdd">添加项目</el-button>
         </el-row>
-        <edit-dialog :form="form" :dialog-visible="dialogVisible" :operator-type="operatorType" @closeDialog="closeDialog"></edit-dialog>
+        <edit-dialog :recordTypeData="recordTypeData" :form="form" :dialog-visible="dialogVisible" :operator-type="operatorType" @closeDialog="closeDialog"></edit-dialog>
+        <el-dialog width="80%" title="生成小班" :visible.sync="smallClassDialogVisible">
+            共{{smallClassList.length}}个小班
+            <div v-for="(value, key, index) in smallClassGroup">
+                {{ key }} 共 {{ value.length }} 个
+            </div>
+            <el-button @click="importSmallClass">确定生成</el-button>
+            <el-table
+                v-if="false"
+                :data="smallClassList"
+                border
+            >
+                <el-table-column
+                        prop="region"
+                        label="区县">
+                </el-table-column>
+                <el-table-column
+                        prop="station"
+                        label="乡（林场)">
+                </el-table-column>
+                <el-table-column
+                        prop="village"
+                        label="村（管护站）名">
+                </el-table-column>
+                <el-table-column
+                        prop="group"
+                        label="（社、林班）号">
+                </el-table-column>
+                <el-table-column
+                        prop="smallClass"
+                        label="小班号">
+                </el-table-column>
+                <el-table-column
+                        prop="placeName"
+                        label="小地名">
+                </el-table-column>
+                <el-table-column
+                        prop="smallClassArea"
+                        label="小班面积（亩）">
+                </el-table-column>
+            </el-table>
+        </el-dialog>
         <el-table
                 :data="tableData"
                 border
@@ -14,7 +55,7 @@
             </el-table-column>
             <el-table-column
                     prop="description"
-                    label="项目描述">
+                    label="文件夹名">
             </el-table-column>
             <el-table-column
                     label="创建日期"
@@ -28,6 +69,7 @@
                     label="操作"
                     width="200">
                 <template slot-scope="scope">
+                    <el-button class="control" @click="getSmallClass(scope.row)" type="text" size="small">获取小班</el-button>
                     <el-button class="control" @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
                     <el-button class="control" @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
                 </template>
@@ -44,6 +86,8 @@
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="query.total">
         </el-pagination>
+
+
     </layout>
 </template>
 <style lang="less" type="text/less">
@@ -62,8 +106,11 @@
 
 </style>
 <script>
+    import io from 'socket.io-client';
+    import ovSocket from '../../components/script/ovSocket';
     import editDialog from './components/dialog.vue';
     import newForm from './components/newForm';
+    import editor from '../../components/editor.vue';
     export default {
         metaInfo(){
             return {
@@ -73,7 +120,7 @@
         data() {
             return {
                 nav: {
-                    sidebar: "2-1",
+                    sidebar: "2-0",
                 },
                 tableData: [],
                 query: {
@@ -83,19 +130,98 @@
                 },
                 dialogVisible: false,
                 operatorType: true,
-                form:{}
+                form:{},
+                recordTypeData:[],
+                smallClassList:[],
+                smallClassGroup:[],
+                smallClassCursor:0,
+                selectProjectId:0,
+                selectRegion:"",
+                smallClassDialogVisible:false,
             }
         },
         components: {
-            editDialog
+            editDialog,
+            editor
         },
         mounted() {
             this.getList();
+            ovSocket.init({callback:this.onMessage});
         },
         methods: {
+            getSmallClassDetail(){
+                ovSocket.getSmallClassDetail(this.smallClassList[this.smallClassCursor].ObjID);
+                this.smallClassCursor++;
+            },
+            getSmallClassEnd(){
+                console.log(this.smallClassList);
+                this.smallClassGroup=_.groupBy(this.smallClassList,'station');
+                this.smallClassDialogVisible=true;
+
+            },
+            onMessage(data){
+                console.log(data);
+                if(data.cmdid===20101){
+                    let name=data.msg.ObjItems[0].Object.Name,detail=data.msg.ObjItems[0].Object.Comment,detailObj={},obj=this.smallClassList[this.smallClassCursor-1],str=name.split('_');
+                    obj.queryName=name;
+                    obj.station=str[0];
+                    obj.village=str[1];
+                    obj.group=str[2];
+                    obj.smallClass=str[3];
+                    obj.region=this.selectRegion;
+                    obj.projectId=this.selectProjectId;
+
+
+                    try{
+                        detail='{'+detail+'}';
+                        detailObj=JSON.parse(detail.replace(/\r\n/g,","));
+                        console.log(detailObj);
+                        obj.region=detailObj['县'];
+                        obj.placeName=detailObj['小地名'];
+                        obj.smallClassArea=detailObj['面积'];
+                    }catch (e){
+
+                    }
+
+                    if(this.smallClassCursor < this.smallClassList.length){
+                        this.getSmallClassDetail();
+                    }else{
+                        this.getSmallClassEnd();
+                    }
+
+                }
+                if(data.cmdid===20107){
+                    console.log(data.msg.ObjType);
+                    if(data.msg.ObjType===13){
+                        if(data.msg.ListID && data.msg.ListID.length){
+                            this.smallClassList=data.msg.ListID;
+                            this.smallClassCursor=0;
+                            this.getSmallClassDetail();
+                        }else{
+                            alert("未找到对应小班文件");
+                        }
+                    }else{
+                        if(data.msg.ListID && data.msg.ListID.length){
+                            ovSocket.searchObj({ParentID:data.msg.ListID[0].ObjID,ObjType:13});
+                        }else{
+                            alert("未找到对应文件夹");
+                        }
+                    }
+                }
+
+            },
+            getSmallClass(row){
+                this.selectRegion=row.name;
+                this.selectProjectId=row.id;
+                ovSocket.searchObj({SrhTxt:row.description});
+            },
             handleAdd() {
-                this.form=newForm();
-                this.dialogVisible=true;
+                this.getRecordType(0).then(res=>{
+                    console.log(res);
+                    this.form=newForm();
+                    this.recordTypeData=res;
+                    this.dialogVisible=true;
+                })
             },
             handleEdit(row) {
                 this.form=newForm(row);
@@ -143,6 +269,42 @@
             },
             getDate(date) {
                 return moment(date).format('YYYY-MM-DD');
+            },
+            getRecordType(projectId){
+                return new Promise((resolve,reject)=>{
+                    Promise.all([
+                        this.$ajax({
+                            method: 'GET',
+                            url: '/api/getLv1RecordType'
+                        }),
+                        this.$ajax({
+                            method: 'GET',
+                            url: '/api/getRecordTypeById',
+                            params: {
+                                projectId
+                            }
+                        }),
+                    ]).then(res=>{
+                        let data=_.groupBy(res[1].data,'pid');
+                        let result=res[0].data.map(item=>{
+                            item.children=data[item.id];
+                            return item;
+                        });
+                        resolve(result);
+                    })
+                })
+            },
+            importSmallClass(){
+                this.$ajax({
+                    method: 'post',
+                    url: '/api/supervisor/import',
+                    data: {
+                        result:this.smallClassList,
+                        projectId:this.selectProjectId
+                    }
+                }).then(res=>{
+                    this.$message.success('导入成功！');
+                })
             }
         }
     }

@@ -13,5 +13,13 @@ module.exports = db.defineModel('member', {
     phone:{
         type: db.BIGINT(20),
         allowNull: true
+    },
+    password: {
+        type: db.STRING(50),
+        allowNull: true
+    },
+    type:{
+        type: db.INTEGER,
+        allowNull: true
     }
 });

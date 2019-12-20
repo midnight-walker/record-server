@@ -4,7 +4,7 @@
 module.exports=(obj)=>{
     let result={
         name:'',
-        password:'',
+        phone:'',
         fullName:'',
     };
     if(obj){

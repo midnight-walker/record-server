@@ -24,6 +24,10 @@ module.exports = db.defineModel('supervisor', {
         type:db.STRING(50),
         allowNull:true
     },
+    queryName:{
+        type:db.STRING(50),
+        allowNull:true
+    },
     placeName:{
         type:db.STRING(50),
         allowNull:true
@@ -52,16 +56,16 @@ module.exports = db.defineModel('supervisor', {
         type:db.BIGINT,
         allowNull:true
     },
-    workGroupName:{
-        type:db.STRING(100),
+    workGroupId:{
+        type:db.INTEGER,
         allowNull:true
     },
-    workGroupPhone:{
-        type:db.BIGINT,
+    memberId:{
+        type:db.INTEGER,
         allowNull:true
     },
     workQuality:{
-        type:db.STRING(50),
+        type:db.INTEGER,
         allowNull:true
     },
     mainQuestion:{

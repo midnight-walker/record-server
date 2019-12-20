@@ -21,11 +21,13 @@
     "koa-router": "7.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
+    "socket.io-client": "^2.3.0",
     "vue": "2.5.8",
     "vue-echarts": "^2.4.0",
     "vue-meta": "^0.5.6",
     "vuex": "^2.3.1",
-    "xlsx-style": "^0.8.9"
+    "xlsx-style": "^0.8.9",
+     "wangeditor":"^3.1.1"
   },
   "devDependencies": {
     "autoprefixer": "^6.7.7",
@@ -50,7 +52,7 @@
     "vue-template-compiler": "2.5.8",
     "webpack": "^2.5.1",
     "koa-webpack-middleware": "latest",
-    "koa-2-webpack-dev-middleware":"latest",
+    "koa-2-webpack-dev-middleware": "latest",
     "webpack-manifest-plugin": "^1.1.0",
     "webpack-merge": "^4.1.0",
     "sequelize": "3.24.1",

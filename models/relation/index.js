@@ -8,10 +8,12 @@ module.exports=(
         monitorDetailDescription,
         monitorStep,
         supervisorDetail,
+        supervisorSimpleDetail,
         supervisor,
         member,
         user,
-        recordType
+        recordType,
+        workGroup
     }
 )=>{
     monitorDetail.belongsTo(monitor,{foreignKey: "monitorId"});
@@ -19,6 +21,9 @@ module.exports=(
     monitorDetail.hasMany(monitorDetailDescription,{foreignKey:'monitorDetailId', targetKey:'id'});
     monitorDetailDescription.belongsTo(monitorStep,{foreignKey: "monitorStepId"});
     monitorDetailDescription.belongsTo(monitorDetail,{foreignKey: "monitorDetailId"});
+    supervisor.hasMany(supervisorSimpleDetail,{foreignKey:'supervisorId', targetKey:'id'});
+    supervisor.belongsTo(member,{foreignKey:'memberId'});
+    supervisor.belongsTo(workGroup,{foreignKey:'workGroupId'});
     supervisorDetail.belongsTo(user,{foreignKey: "operator"});
     supervisorDetail.belongsTo(member,{foreignKey: "memberId"});
     supervisorDetail.belongsTo(supervisor,{foreignKey: "supervisorId"});

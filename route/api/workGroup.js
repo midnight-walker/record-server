@@ -16,6 +16,18 @@ var getWorkGroup = async (ctx, next) => {
     ctx.rest(workGroups, count);
 };
 
+var validateWorkGroup = async (ctx, next) => {
+    let name = ctx.query.username , phone = parseInt(ctx.query.phone),query={};
+    query.where={
+        name,
+        phone
+    }
+    var workGroups = await model.workGroup.find(query);
+    ctx.rest(!!workGroups);
+};
+
+
+
 var deleteWorkGroup = async (ctx, next) => {
     let params = {id: parseInt(ctx.params.id)};
     var workGroup = await model.workGroup.find({where: params});
@@ -26,7 +38,7 @@ var deleteWorkGroup = async (ctx, next) => {
 var createWorkGroup = async (ctx, next) => {
     let params = {
         name: ctx.request.body.name,
-        password: ctx.request.body.password,
+        phone: ctx.request.body.phone,
         fullName: ctx.request.body.fullName,
     };
     let sameName=await model.workGroup.findAll({
@@ -60,6 +72,7 @@ var updateWorkGroup = async (ctx, next) => {
 
 module.exports = {
     'GET /api/workGroup': getWorkGroup,
+    'GET /api/validateWorkGroup': validateWorkGroup,
     'POST /api/workGroup': createWorkGroup,
     'PATCH /api/workGroup/:id': updateWorkGroup,
     'DELETE /api/workGroup/:id': deleteWorkGroup

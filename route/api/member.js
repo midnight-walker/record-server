@@ -48,7 +48,7 @@ var updateMembers = async (ctx, next) => {
 
 var getMemberList = async (ctx, next) => {
     var members = await model.member.findAll({
-        attributes: ['id', 'name','wxname']
+        attributes: ['id', 'name','wxname',"phone"]
     });
     var count = await model.member.count();
     ctx.rest(members, count);

@@ -13,8 +13,8 @@
                     label="用户名">
             </el-table-column>
             <el-table-column
-                    prop="password"
-                    label="密码">
+                    prop="phone"
+                    label="手机号">
             </el-table-column>
             <el-table-column
                     prop="fullName"
@@ -77,7 +77,7 @@
         data() {
             return {
                 nav: {
-                    sidebar: "2-0",
+                    sidebar: "1-1",
                 },
                 tableData: [],
                 query: {

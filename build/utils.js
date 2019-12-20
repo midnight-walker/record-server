@@ -24,7 +24,7 @@ plugins = [
         minimize: true
     }),
     // split vendor js into its own file
-    new webpack.optimize.CommonsChunkPlugin({
+    /*new webpack.optimize.CommonsChunkPlugin({
         name: 'vendor',
         minChunks: 3
     }),
@@ -33,7 +33,7 @@ plugins = [
     new webpack.optimize.CommonsChunkPlugin({
         name: 'manifest',
         minChunks: Infinity
-    }),
+    }),*/
     new ExtractTextPlugin({
         filename: runtime === 'local' ? '[name].css' : '[name].[contenthash:7].css'
     })

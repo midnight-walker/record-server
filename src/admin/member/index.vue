@@ -77,7 +77,7 @@
         data() {
             return {
                 nav: {
-                    sidebar: "1-3",
+                    sidebar: "1-0",
                 },
                 tableData: [],
                 query: {

@@ -4,13 +4,17 @@
 const model = require('../../model');
 
 var getProject = async (ctx, next) => {
-    let page = parseInt(ctx.query.page) - 1, size = parseInt(ctx.query.pageSize),query={};
+    let page = parseInt(ctx.query.page) - 1, size = parseInt(ctx.query.pageSize),id=parseInt(ctx.query.id),where={},query={};
     if(!isNaN(page) && !isNaN(size)){
         query={
             offset: page*size,
             limit: size
         }
     };
+    if(!isNaN(id)){
+        where.id=id;
+        query.where=where;
+    }
     var projects = await model.project.findAll(query);
     var count = await model.project.count();
     ctx.rest(projects, count);
@@ -27,6 +31,7 @@ var createProject = async (ctx, next) => {
     let params = {
         name: ctx.request.body.name,
         description: ctx.request.body.description,
+        standard: ctx.request.body.standard,
     };
     let sameName=await model.project.findAll({
         where: {
@@ -49,6 +54,7 @@ var updateProject = async (ctx, next) => {
     var project = await model.project.find({where: params});
     project.name = ctx.request.body.name;
     project.description = ctx.request.body.description;
+    project.standard = ctx.request.body.standard;
     project.updatedAt = Date.now();
     await project.save();
     ctx.rest({

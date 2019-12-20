@@ -3,6 +3,32 @@
  */
 const model = require('../../model');
 
+var getLv1RecordType = async (ctx, next) => {
+    let query={};
+    query.where={
+        level:1
+    };
+    var recordTypes = await model.recordType.findAll(query);
+    var count = await model.recordType.count();
+    ctx.rest(recordTypes, count);
+};
+
+
+var getRecordTypeById = async (ctx, next) => {
+    let projectId=parseInt(ctx.query.projectId),query={},where={};
+    if(!isNaN(projectId)){
+        where.projectId=projectId;
+    }else{
+        where.projectId=0;
+    }
+    where.level={
+        $not:1
+    };
+    query.where=where;
+    var recordTypes = await model.recordType.findAll(query);
+    ctx.rest(recordTypes);
+};
+
 var getRecordType = async (ctx, next) => {
     let page = parseInt(ctx.query.page) - 1, size = parseInt(ctx.query.pageSize),query={};
     if(!isNaN(page) && !isNaN(size)){
@@ -83,6 +109,8 @@ var updateRecordType = async (ctx, next) => {
 
 module.exports = {
     'GET /api/recordType': getRecordType,
+    'GET /api/getLv1RecordType': getLv1RecordType,
+    'GET /api/getRecordTypeById': getRecordTypeById,
     'GET /api/recordTypeAll': getRecordTypeAll,
     'POST /api/recordType': createRecordType,
     'PATCH /api/recordType/:id': updateRecordType,

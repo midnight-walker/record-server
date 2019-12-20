@@ -12,7 +12,7 @@ let admin=[
     {
         "name":"系统设置",
         "list":[
-            {
+            /*{
                 "id":"user",
                 "name":"用户"
             },
@@ -23,10 +23,14 @@ let admin=[
             {
                 "id":"station",
                 "name":"林场"
-            },
+            },*/
             {
                 "id":"member",
                 "name":"监理员"
+            },
+            {
+                "id":"workGroup",
+                "name":"除治队"
             },
         ],
         "prop":"system"
@@ -34,10 +38,10 @@ let admin=[
     {
         "name":"业务设置",
         "list":[
-            {
-                "id":"workGroup",
-                "name":"施工单位"
-            },
+            /*{
+                "id":"projectCreate",
+                "name":"创建项目"
+            },*/
             {
                 "id":"project",
                 "name":"项目"
@@ -61,8 +65,8 @@ let admin=[
                 "name":"监理点"
             },
             {
-                "id":"monitor",
-                "name":"监测点"
+                "id":"supervisorImport",
+                "name":"监理记录导入"
             },
             {
                 "id":"supervisorTotal",

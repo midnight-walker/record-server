@@ -10,6 +10,10 @@
                 border
                 style="width: 100%">
             <el-table-column
+                    prop="id"
+                    label="记录编码">
+            </el-table-column>
+            <el-table-column
                     label="父级类型"
                     width="120">
                 <template slot-scope="scope">
@@ -97,7 +101,7 @@
         data() {
             return {
                 nav: {
-                    sidebar: "2-2",
+                    sidebar: "2-1",
                 },
                 tableData: [],
                 query: {

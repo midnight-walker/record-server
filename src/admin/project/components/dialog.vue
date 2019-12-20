@@ -1,12 +1,26 @@
 <template>
-    <el-dialog :title="operatorType == 'add' ? '新增施工单位': '编辑施工单位'" :visible.sync="dialogVisible" :before-close="cancel">
-        <el-form :model="form" ref="form" :rules="rules" label-width="120px">
+    <el-dialog width="80%" :title="operatorType == 'add' ? '新增项目': '编辑项目'" :visible.sync="dialogVisible" :before-close="cancel">
+        <el-form :model="form" ref="form" :rules="rules" label-width="350px">
             <el-form-item label="项目名" prop="name">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="项目描述" prop="description">
+            <el-form-item label="文件夹名" prop="description">
                 <el-input v-model="form.description"></el-input>
             </el-form-item>
+            <el-form-item label="评分标准">
+                <editor ref="standard" :text="form.standard"></editor>
+            </el-form-item>
+            <!--<el-form-item label="整改通知书">
+                <editor ref="notice" :text="form.notice"></editor>
+            </el-form-item>-->
+
+            <!--<el-tabs v-if="recordTypeData" type="border-card">
+                <el-tab-pane :label="item.name" v-for="(item,index) in recordTypeData">
+                    <el-form-item v-for="recordType in item.children" :label="recordType.name">
+                        <el-input v-model="recordType.score"></el-input>
+                    </el-form-item>
+                </el-tab-pane>
+            </el-tabs>-->
         </el-form>
         <div slot="footer" class="dialog-footer">
             <el-button @click="save" type="primary">保存</el-button>
@@ -18,8 +32,9 @@
 
 </style>
 <script type="text/ecmascript-6">
+    import editor from '../../../components/editor.vue';
     export default {
-        props: ['dialogVisible','operatorType','form'],
+        props: ['dialogVisible','operatorType','form','recordTypeData'],
         data() {
             return {
                 rules: {
@@ -29,6 +44,20 @@
             }
         },
         methods: {
+            /*getRecordTypeList() {
+                let result=[];
+                if(this.recordTypeData && this.recordTypeData.length){
+                    let data=Object.assign({},this.recordTypeData);
+                    data.forEach(item=>{
+                        if(item.children && item.children.length){
+                            item.children.forEach(i=>{
+                                result.push(i);
+                            })
+                        }
+                    })
+                }
+                return result;
+            },*/
             save(){
                 this.$refs['form'].validate((valid) => {
                     if (valid) {
@@ -44,20 +73,26 @@
                 });
             },
             requestSave(){
+                //let recordTypeData=this.getRecordTypeList();
+
+                let standard=this.$refs.standard.getContent();
+                let data=Object.assign({},this.form,{standard});
                 this.$ajax({
                     method: 'POST',
                     url: '/api/project',
-                    data: this.form
+                    data
                 }).then(res => {
                     this.$message.success('新增成功');
                     this.cancel(true);
                 })
             },
             requestUpdate(id){
+                let standard=this.$refs.standard.getContent();
+                let data=Object.assign({},this.form,{standard});
                 this.$ajax({
                     method: 'PATCH',
                     url: '/api/project/'+id,
-                    data: this.form
+                    data
                 }).then(res => {
                     this.$message.success('修改成功');
                     this.cancel(true);
@@ -68,6 +103,7 @@
             }
         },
         components: {
+            editor
         }
     }
 </script>

@@ -4,8 +4,8 @@
             <el-form-item label="用户名" prop="name">
                 <el-input v-model="form.name"></el-input>
             </el-form-item>
-            <el-form-item label="密码" prop="password">
-                <el-input v-model="form.password"></el-input>
+            <el-form-item label="手机号" prop="phone">
+                <el-input v-model="form.phone"></el-input>
             </el-form-item>
             <el-form-item label="公司全称" prop="fullName">
                 <el-input v-model="form.fullName"></el-input>
@@ -27,7 +27,7 @@
             return {
                 rules: {
                     name:  [{ required: true, message: '请输入用户名', trigger: 'blur' }],
-                    password: [{ required: true, message: '请输入密码', trigger: 'blur' }],
+                    phone: [{ required: true, message: '请输入手机号', trigger: 'blur' }],
                     fullName:  [{ required: true, message: '请输入公司全称', trigger: 'blur' }]
                 }
             }
