@@ -45,10 +45,18 @@ module.exports = db.defineModel('supervisor', {
         allowNull:true
     },
     startTime:{
-        type:db.BIGINT,
+        type:db.STRING(20),
         allowNull:true
     },
     endTime:{
+        type:db.STRING(20),
+        allowNull:true
+    },
+    confirmTime:{
+        type:db.BIGINT,
+        allowNull:true
+    },
+    rectificationTime:{
         type:db.BIGINT,
         allowNull:true
     },
@@ -74,6 +82,10 @@ module.exports = db.defineModel('supervisor', {
     },
     effect:{
         type:db.STRING(50),
+        allowNull:true
+    },
+    step:{
+        type:db.INTEGER,
         allowNull:true
     }
 });

@@ -23,7 +23,11 @@ var validateWorkGroup = async (ctx, next) => {
         phone
     }
     var workGroups = await model.workGroup.find(query);
-    ctx.rest(!!workGroups);
+    if(workGroups){
+        ctx.rest(workGroups);
+    }else{
+        ctx.rest(false);
+    }
 };
 
 

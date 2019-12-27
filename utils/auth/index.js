@@ -101,6 +101,13 @@ const workerPath=[
     },
 ];
 
+const webGroupPath=[
+    {
+        method:'POST',
+        path:'/api/updateSupervisorStep'
+    },
+];
+
 function checkWorkerPath(ctx) {
     return workerPath.some((item)=>{
         return item.method===ctx.request.method && item.path===ctx.request.path;
@@ -108,7 +115,10 @@ function checkWorkerPath(ctx) {
 }
 
 function checkWebPath(ctx) {
-    return ctx.request.path.startsWith('/web') || (ctx.request.path.startsWith('/api') && ctx.request.method==='GET');
+    let isWebPath=webGroupPath.some((item)=>{
+        return item.method===ctx.request.method && item.path===ctx.request.path;
+    });
+    return isWebPath || ctx.request.path.startsWith('/web') || (ctx.request.path.startsWith('/api') && ctx.request.method==='GET');
 }
 
 module.exports={

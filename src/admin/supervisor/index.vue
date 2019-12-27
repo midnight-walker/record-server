@@ -12,11 +12,37 @@
             </el-select>
             查询名：
             <el-input style="width: 200px;" @blur="getList" v-model="query.queryName"></el-input>
+            状态：
+            <el-select @change="getList" v-model="query.step" placeholder="">
+                <el-option
+                        v-for="state in stateList"
+                        :key="state.id"
+                        :label="state.name"
+                        :value="state.id"
+                ></el-option>
+            </el-select>
             <!--<el-button type="primary" icon="plus" @click="handleImport">导入监理点</el-button>
             <el-button type="primary" icon="plus" @click="handleExport">导出监理计划表</el-button>-->
         </el-row>
         <el-row class="tool-bar">
-            <el-button type="primary" icon="plus" @click="handleAdd">添加记录点</el-button>
+            <!--<el-button type="primary" icon="plus" @click="handleAdd">添加记录点</el-button>-->
+            监理员：<el-select style="width: 100px" filterable v-model="selectMemberId"  placeholder="请选择监理员">
+            <el-option
+                    v-for="member in memberList"
+                    :key="member.id"
+                    :label="member.name"
+                    :value="member.id"
+            ></el-option>
+        </el-select>
+            除治队：<el-select style="width: 100px" filterable v-model="selectWorkGroupId"  placeholder="请选择监理员">
+            <el-option
+                    v-for="workGroup in workGroupList"
+                    :key="workGroup.id"
+                    :label="workGroup.name"
+                    :value="workGroup.id"
+            ></el-option>
+        </el-select>
+            <el-button type="primary" style="margin-left: 10px;" @click="handleSetMember">批量设置</el-button>
         </el-row>
         <edit-dialog :form="form" :workGroupList="workGroupList" :projectList="projectList" :dialog-visible="dialogVisible" :operator-type="operatorType" @closeDialog="closeDialog"></edit-dialog>
         <el-table
@@ -35,8 +61,30 @@
                     label="查询名">
             </el-table-column>
             <el-table-column
+                    prop="member.name"
+                    label="监理员">
+            </el-table-column>
+            <el-table-column
+                    prop="work_group.name"
+                    label="除治队">
+            </el-table-column>
+            <el-table-column
+                label="监理状态">
+                <template slot-scope="scope">
+                    <span>{{ getStep(scope.row.step) }}</span>
+                </template>
+            </el-table-column>
+            <el-table-column
                     prop="workQuality"
                     label="监理得分">
+            </el-table-column>
+            <el-table-column
+                    prop="placeName"
+                    label="小地名">
+            </el-table-column>
+            <el-table-column
+                    prop="smallClassArea"
+                    label="小班面积（亩）">
             </el-table-column>
             <el-table-column
                     prop="region"
@@ -57,22 +105,6 @@
             <el-table-column
                     prop="smallClass"
                     label="小班号">
-            </el-table-column>
-            <el-table-column
-                    prop="placeName"
-                    label="小地名">
-            </el-table-column>
-            <el-table-column
-                    prop="smallClassArea"
-                    label="小班面积（亩）">
-            </el-table-column>
-            <el-table-column
-                    prop="member.name"
-                    label="监理员">
-            </el-table-column>
-            <el-table-column
-                    prop="work_group.name"
-                    label="除治队">
             </el-table-column>
             <el-table-column
                     prop="treeCompose"
@@ -97,7 +129,7 @@
                 @size-change="changePageSize"
                 @current-change="changePage"
                 :current-page="query.page"
-                :page-sizes="[10,50,100, 200]"
+                :page-sizes="[10,20,50,100, 200]"
                 :page-size="query.pageSize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="query.total">
@@ -197,13 +229,14 @@
         data() {
             return {
                 nav: {
-                    sidebar: "3-1",
+                    sidebar: "3-0",
                 },
                 tableData: [],
                 query: {
                     total: 0,
                     page: 1,
-                    pageSize: 10,
+                    pageSize: 20,
+                    step:-1
                 },
                 dialogVisible: false,
                 operatorType: true,
@@ -212,14 +245,40 @@
                 memberList:[],
                 projectList:[],
                 recordTypeList:[],
-                selectMemberId:0,
-                selectWorkGroupId:0,
+                selectMemberId:"",
+                selectWorkGroupId:"",
                 selectId:0,
                 ovSupervisorList:[],
                 ovSupervisorCursor:0,
                 supervisorSimpleDetailDialogVisible:false,
                 supervisorViewDialogVisible:false,
-                supervisorSimpleDetailList:[]
+                supervisorSimpleDetailList:[],
+                stateList:[
+                    {
+                        id:-1,
+                        name:"全部"
+                    },
+                    {
+                        id:0,
+                        name:"未开始"
+                    },
+                    {
+                        id:1,
+                        name:"待确认"
+                    },
+                    {
+                        id:2,
+                        name:"整改中"
+                    },
+                    {
+                        id:3,
+                        name:"待验收"
+                    },
+                    {
+                        id:4,
+                        name:"已验收"
+                    }
+                ]
             }
         },
         components: {
@@ -312,6 +371,10 @@
             getProject(id){
                 let project = this.projectList.find(item => item.id === id);
                 return project ? project.name : '';
+            },
+            getStep(step){
+                let steps=["未开始","待确认","整改中","待验收","已验收"];
+                return steps[step];
             },
             changeProject(){
                 this.getList();
@@ -507,7 +570,8 @@
                             workQuality,
                             workGroupId:this.selectWorkGroupId,
                             memberId:this.selectMemberId,
-                            supervisorId:this.selectId
+                            supervisorId:this.selectId,
+                            startTime:moment().format('YYYY-MM-DD')
                         }
                     }).then(res=>{
                         this.$message.success('导入成功！');
@@ -517,6 +581,23 @@
                 }else{
                     this.$message.error('没有可导入的数据')
                 }
+            },
+            handleSetMember(){
+                if(!this.selectWorkGroupId || !this.selectMemberId){
+                    this.$message.error("请先选择需要批量设置的监理员和除治队");
+                    return;
+                }
+                this.$ajax({
+                    method: 'POST',
+                    url: '/api/setSupervisorMember',
+                    data: {
+                        ...this.query,
+                        workGroupId:this.selectWorkGroupId,
+                        memberId:this.selectMemberId
+                    }
+                }).then(res => {
+                    this.$message.success("设置成功")
+                })
             }
         }
     }

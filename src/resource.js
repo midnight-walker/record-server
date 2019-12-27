@@ -57,21 +57,9 @@ let admin=[
         "name":"业务列表",
         "list":[
             {
-                "id":"supervisorDetail",
-                "name":"业务记录"
-            },
-            {
                 "id":"supervisor",
                 "name":"监理点"
             },
-            {
-                "id":"supervisorImport",
-                "name":"监理记录导入"
-            },
-            {
-                "id":"supervisorTotal",
-                "name":"监理统计"
-            }
         ],
         "prop":"voucher"
     }

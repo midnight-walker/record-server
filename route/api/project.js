@@ -32,6 +32,7 @@ var createProject = async (ctx, next) => {
         name: ctx.request.body.name,
         description: ctx.request.body.description,
         standard: ctx.request.body.standard,
+        notice: ctx.request.body.notice,
     };
     let sameName=await model.project.findAll({
         where: {

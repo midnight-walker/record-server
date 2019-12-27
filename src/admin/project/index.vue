@@ -67,9 +67,10 @@
             <el-table-column
                     fixed="right"
                     label="操作"
-                    width="200">
+                    width="400">
                 <template slot-scope="scope">
                     <el-button class="control" @click="getSmallClass(scope.row)" type="text" size="small">获取小班</el-button>
+                    <el-button class="control" @click="getProjectExcel(scope.row)" type="text" size="small">获取评分表</el-button>
                     <el-button class="control" @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
                     <el-button class="control" @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>
                 </template>
@@ -111,6 +112,10 @@
     import editDialog from './components/dialog.vue';
     import newForm from './components/newForm';
     import editor from '../../components/editor.vue';
+
+    import downExcel from '../../components/script/xlsx';
+    import baseExcel from '../../components/script/base';
+    import excelHelper from './excelHelper';
     export default {
         metaInfo(){
             return {
@@ -168,7 +173,7 @@
                     obj.village=str[1];
                     obj.group=str[2];
                     obj.smallClass=str[3];
-                    obj.region=this.selectRegion;
+                    obj.region=this.selectRegion.split('20')[0];
                     obj.projectId=this.selectProjectId;
 
 
@@ -305,6 +310,23 @@
                 }).then(res=>{
                     this.$message.success('导入成功！');
                 })
+            },
+            getProjectExcel(row){
+                this.$ajax({
+                    method: 'GET',
+                    url: '/api/supervisor',
+                    params: {
+                        projectId:row.id
+                    }
+                }).then(res => {
+                    let groupData=_.groupBy(res.data, 'station'),result=[],title=row.name+"松材线虫病除治质量监理乡镇小班评分结果一览表";
+                    for(let key in groupData){
+                        result.push(groupData[key]);
+                    }
+                    console.log(result);
+                    downExcel.downloadExl(excelHelper.totalData(result,title),title);
+                })
+
             }
         }
     }
