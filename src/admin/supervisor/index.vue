@@ -116,8 +116,9 @@
                     label="操作"
                     width="200">
                 <template slot-scope="scope">
-                    <el-button class="control" @click="handleCount(scope.row)" type="text" size="small">生成记录</el-button>
-                    <el-button class="control" @click="viewCount(scope.row)" type="text" size="small">查看记录</el-button>
+                    <el-button v-if="scope.row.step<2" class="control" @click="handleCount(scope.row)" type="text" size="small">生成记录</el-button>
+                    <el-button v-if="scope.row.step>0" class="control" @click="viewCount(scope.row)" type="text" size="small">查看记录</el-button>
+                    <el-button v-if="scope.row.step===3" class="control" @click="endSupervisor(scope.row)" type="text" size="small">验收通过</el-button>
                     <el-button class="control" @click="handleEdit(scope.row)" type="text" size="small">编辑</el-button>
                     <!--<el-button class="control" @click="handleDelete(scope.row)" type="text" size="small">删除</el-button>-->
                 </template>
@@ -597,6 +598,21 @@
                     }
                 }).then(res => {
                     this.$message.success("设置成功")
+                })
+            },
+            endSupervisor(row){
+                this.$ajax({
+                    method: 'POST',
+                    url: '/api/updateSupervisorStep',
+                    data: {
+                        id:row.id,
+                        workGroupId:row.workGroupId,
+                        memberId:row.memberId,
+                        step:row.step
+                    }
+                }).then(res => {
+                    this.$message.success("更新成功");
+                    this.getList();
                 })
             }
         }

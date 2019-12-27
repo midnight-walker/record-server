@@ -170,6 +170,8 @@ var updateSupervisorStep = async (ctx, next) => {
         Object.assign(supervisor,{step:2,confirmTime:time});
     }else if(step===2){
         Object.assign(supervisor,{step:3,rectificationTime:time});
+    }else if(step===3){
+        Object.assign(supervisor,{step:4,endTime:time});
     }
     if(supervisor){
         await supervisor.save();

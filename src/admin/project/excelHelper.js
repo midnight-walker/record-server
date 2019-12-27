@@ -89,14 +89,14 @@ let excelHelper={
             {s:{r:4,c:4},e:{r:5,c:4}},
             {s:{r:4,c:5},e:{r:5,c:5}}
         ];
-        for(let j=0;j<6;j++){
+        for(let j=0;j<7;j++){
             head[baseExcel.getColumnChar(j+6)+'5']={
                 v:'监理评分',
                 s:defaultHeadStyle
             };
         }
         merges.push({
-            s:{r:4,c:6},e:{r:4,c:11}
+            s:{r:4,c:6},e:{r:4,c:12}
         });
         columns=columns.concat([
             {
@@ -128,6 +128,13 @@ let excelHelper={
             {
                 prop:'change',
                 label:"是否整改",
+                width:"70",
+                headStyle:defaultHeadStyle,
+                highlightStyle
+            },
+            {
+                prop:'isEnd',
+                label:"是否验收",
                 width:"70",
                 headStyle:defaultHeadStyle,
                 highlightStyle
@@ -165,6 +172,12 @@ let excelHelper={
                 }else{
                     item.change="";
                 }
+                if(detail.visited&&detail.step>2){
+                    item.isEnd=detail.step>3?"是":"否";
+                }else{
+                    item.isEnd="";
+                }
+
                 item.mark="";
                 item.visited=detail.visited?"是":"否";
                 list.push(item);
