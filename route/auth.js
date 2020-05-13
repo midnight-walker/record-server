@@ -11,7 +11,9 @@ var login = async (ctx, next) => {
             <p>Name: <input name="name" value="frog"></p>
             <p>Password: <input name="password" type="password" value="123456"></p>
             <p><input type="submit" value="Submit"></p>
-        </form>`;
+        </form>
+        <div>ICP证：<a href="//www.beian.miit.gov.cn">渝ICP备19017832号</a></div>
+    `;
 };
 
 var loginResult = async (ctx, next) => {
