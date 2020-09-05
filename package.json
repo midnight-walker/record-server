@@ -12,7 +12,7 @@
   "author": "midnight-walker",
   "license": "Apache-2.0",
   "dependencies": {
-    "axios": "^0.15.3",
+    "axios": "^0.19.0",
     "element-ui": "2.0.11",
     "jquery": "3.1.1",
     "koa": "2.0.0",
